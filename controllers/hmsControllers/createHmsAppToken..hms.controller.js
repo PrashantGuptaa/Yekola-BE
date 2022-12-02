@@ -3,14 +3,14 @@ import { createHmsRoomService } from "../../services/hmsService/managementServic
 
 const createHmsAppTokenController = async (req, res) => {
     try {
-        langoLogger.info("Creating HMS Rooms");
+        yekolaLogger.info("Creating HMS Rooms");
         const name = _.get(req.body, ['name']);
         const description = _.get(req.body, ['description']);
         const response = await createHmsRoomService(name, description);
-        langoLogger.info("Successfully created HMS Room");
+        yekolaLogger.info("Successfully created HMS Room");
         res.status(201).json(response);        
     } catch (e) {
-        langoLogger.error(e);
+        yekolaLogger.error(e);
         res.status(500).json(e);    }
 
 }

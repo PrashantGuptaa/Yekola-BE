@@ -24,7 +24,7 @@ app.use(bodyParser.json())
 app.use(express.json());
 
 // Global Logger
-global.langoLogger = winstonLogger;
+global.yekolaLogger = winstonLogger;
 mongoDbConnection();
 
 app.use("/api/v1", router);

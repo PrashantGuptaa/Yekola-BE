@@ -5,7 +5,7 @@ export const generateAppTokenHmsService = async (roomId, userId, role) => {
     try {
       const HMS_APP_ACCESS_KEY = process.env.HMS_AUTH_ACCESS;
       const HMS_APP_SECRET_KEY = process.env.HMS_AUTH_SECRET;
-      langoLogger.info(`Genrating App token for room-id :${roomId}, email: ${userId}, role: ${role} `);
+      yekolaLogger.info(`Genrating App token for room-id :${roomId}, email: ${userId}, role: ${role} `);
   
       const payload = {
         access_key: HMS_APP_ACCESS_KEY,
@@ -26,6 +26,6 @@ export const generateAppTokenHmsService = async (roomId, userId, role) => {
   
       return accessToken;
     } catch (e) {
-      langoLogger.error(`Error while generating app token for HMS, ${e}`);
+      yekolaLogger.error(`Error while generating app token for HMS, ${e}`);
     }
   };

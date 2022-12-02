@@ -7,7 +7,7 @@ const generateHmsManagementToken = async () => {
   try {
     const HMS_APP_ACCESS_KEY = process.env.HMS_AUTH_ACCESS;
     const HMS_APP_SECRET_KEY = process.env.HMS_AUTH_SECRET;
-    langoLogger.info(`Fetching Access Token for HMS-Mangement `);
+    yekolaLogger.info(`Fetching Access Token for HMS-Mangement `);
     const accessToken = await jwt.sign(
       {
         access_key: HMS_APP_ACCESS_KEY,
@@ -23,17 +23,17 @@ const generateHmsManagementToken = async () => {
         jwtid: v4(),
       }
     );
-    langoLogger.info("Fetched Access Token for HMS");
+    yekolaLogger.info("Fetched Access Token for HMS");
     return accessToken;
   } catch (e) {
-    langoLogger.info("Error while connecting HMS", e);
+    yekolaLogger.info("Error while connecting HMS", e);
     throw new Error(e);
   }
 };
 
 export const createHmsRoomService = async (name, description) => {
   try {
-    langoLogger.info("Attempting to create HMS Room");
+    yekolaLogger.info("Attempting to create HMS Room");
     const HMS_URL = process.env.HMS_URL;
     const TEMPLATE_ID = process.env.HMS_TEMPLATE_ID;
     const HMS_REGION = process.env.HMS_REGION;
@@ -51,17 +51,17 @@ export const createHmsRoomService = async (name, description) => {
       Authorization: `Bearer ${accessToken}`,
     };
     const response = await HttpServices.postRequest(HMS_URL, data, headers);
-    langoLogger.info("Successfully created HMS Room - HMS Service");
+    yekolaLogger.info("Successfully created HMS Room - HMS Service");
     return response.data;
   } catch (e) {
-    langoLogger.error(`Error while creating HMS Room: ${e.message}`);
+    yekolaLogger.error(`Error while creating HMS Room: ${e.message}`);
     throw new Error(e);
   }
 };
 
 export const listHmsRoomsService = async () => {
   try {
-    langoLogger.info(`Fetching List of Rooms`);
+    yekolaLogger.info(`Fetching List of Rooms`);
     const accessToken = await generateHmsManagementToken();
     const HMS_URL = process.env.HMS_URL;
     const headers = {
@@ -69,10 +69,10 @@ export const listHmsRoomsService = async () => {
     };
     const response = await HttpServices.getRequest(HMS_URL, headers);
 
-    langoLogger.info("Successfully fetched list of rooms - HMS Service");
+    yekolaLogger.info("Successfully fetched list of rooms - HMS Service");
     return response.data;
   } catch (e) {
-    langoLogger.error(`Error while creating HMS Room: ${e}`);
+    yekolaLogger.error(`Error while creating HMS Room: ${e}`);
     throw new Error(e);
   }
 };

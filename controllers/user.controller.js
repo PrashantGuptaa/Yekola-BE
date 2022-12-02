@@ -8,7 +8,7 @@ import bcryptjs from "bcryptjs";
 export const loginUserController = async (req, res) => {
   try {
     const { email, password } = req.body;
-    langoLogger.info(`Attemping to login user with email: ${email}`);
+    yekolaLogger.info(`Attemping to login user with email: ${email}`);
     const result = await UserModel.find({ email });
     if (result.length > 1) {
       return res
@@ -25,7 +25,7 @@ export const loginUserController = async (req, res) => {
       return res.status(403).json({ error: "Invalied Email or Password" });
     }
     const accessToken = await loginUserService(req.body);
-    langoLogger.info("Successfully generated access token for user");
+    yekolaLogger.info("Successfully generated access token for user");
     res.status(200).json({ accessToken });
   } catch (e) {
     console.error(e);
@@ -42,7 +42,7 @@ export const registerUserController = async (req, res) => {
         .status(409)
         .json({ error: "Account with given email already exists" });
     }
-    langoLogger.info("Registering User...");
+    yekolaLogger.info("Registering User...");
     const accessToken = await registerUserService(req.body);
     res.status(200).json({ accessToken });
   } catch (e) {
