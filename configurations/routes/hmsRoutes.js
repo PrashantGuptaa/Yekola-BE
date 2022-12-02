@@ -1,10 +1,12 @@
 import express from 'express';
 // import generateAccessTokenForHms from './../controllers/hmsControllers/generateAuthToken.controller.hms';
-import createHmsRoomsController from './../controllers/hmsControllers/createHmsRooms.hms.controller';
+import createHmsRoomsController from '../../controllers/hmsControllers/createHmsRooms.hms.controller';
+import listHmsRoomsController from '../../controllers/hmsControllers/listHmsRooms.hms.controller';
 
 const hmsRouter = express.Router();
 
 // hmsRouter.get('/token', generateAccessTokenForHms);
 hmsRouter.post('/create-rooms', createHmsRoomsController);
+hmsRouter.get('/list-rooms', listHmsRoomsController);
 
 export default hmsRouter;

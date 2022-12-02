@@ -1,15 +1,28 @@
 import winston from "winston";
 import { v4 } from "uuid";
 
+import path from 'path';
+
+// Return the last folder name in the path and the calling
+// module's filename.
+const getLabel = function(callingModule) {
+  const parts = callingModule.filename.split(path.sep);
+  return path.join(parts[parts.length - 2], parts.pop());
+};
+
 const winstonLogger = winston.createLogger({
     level: 'info',
-    format: winston.format.json(),
-    defaultMeta: { ["Request-Id"]: v4() },
+    format:  winston.format.combine(
+      winston.format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss'
+      }),
+      winston.format.json()
+  ),
+    defaultMeta: { ["Request-Id"]: v4(), },
     transports: [
-      //
-      // - Write all logs with importance level of `error` or less to `error.log`
-      // - Write all logs with importance level of `info` or less to `combined.log`
-      //
+    //   new winston.transports.Console({
+    //   label: getLabel(callingModule)
+    // }),
       new winston.transports.File({ filename: 'error.log', level: 'error' }),
       new winston.transports.File({ filename: 'combined.log' }),
     ],
