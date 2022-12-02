@@ -15,7 +15,7 @@ async function getClient() {
         //   ssl: true,
         });
         await pool.connect();
-        console.log(`Successfully Connected to Postgres....`);
+        console.log(`💥 Successfully Connected to Postgres Database`);
         return pool;        
     } catch (e) {
         console.error(e);

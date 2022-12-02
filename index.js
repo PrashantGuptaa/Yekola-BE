@@ -32,4 +32,4 @@ app.use("/api/hms/v1", hmsRouter);
 
 
 const PORT = process.env.APP_PORT || 5001;
-app.listen(PORT, () => console.log(`⚡⚡ Server is running on PORT:${PORT} ⚡⚡`))
+app.listen(PORT, () => console.log(`⚡Server is running on PORT: ${PORT} `))
