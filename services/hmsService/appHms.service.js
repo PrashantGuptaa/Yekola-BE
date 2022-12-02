@@ -3,11 +3,9 @@ import { v4 } from 'uuid';
 
 export const generateAppTokenHmsService = async (roomId, userId, role) => {
     try {
-      const HMS_URL = process.env.HMS_URL;
-      const TEMPLATE_ID = process.env.HMS_TEMPLATE_ID;
-      const HMS_REGION = process.env.HMS_REGION;
       const HMS_APP_ACCESS_KEY = process.env.HMS_AUTH_ACCESS;
       const HMS_APP_SECRET_KEY = process.env.HMS_AUTH_SECRET;
+      langoLogger.info(`Genrating App token for room-id :${roomId}, email: ${userId}, role: ${role} `);
   
       const payload = {
         access_key: HMS_APP_ACCESS_KEY,

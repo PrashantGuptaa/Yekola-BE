@@ -6,8 +6,8 @@ import { UserModel } from "../Model/user.model";
 
 export const loginUserService = async (userDataObj) => {
   try {
-    const { email, password } = userDataObj;
-        const accessToken = generateAccessToken(email);
+    const { email, password, role } = userDataObj;
+    const accessToken = generateAccessToken({ email, role });
     return accessToken;
   } catch (e) {
     console.error(e);
@@ -17,7 +17,7 @@ export const loginUserService = async (userDataObj) => {
 
 export const registerUserService = async (userDataObj) => {
   try {
-    const { email, password } = userDataObj;// 123 -> @1324efdssv gergbdf
+    const { email, password, role } = userDataObj;
     const securedPassword = await bcryptjs.hash(password, 10);
     const dataObj = {
       email,
@@ -27,7 +27,7 @@ export const registerUserService = async (userDataObj) => {
 
     const result = await userModelInstance.save(dataObj);
     console.log("F-4", result);
-    const accessToken = generateAccessToken(email);
+    const accessToken = generateAccessToken({ email, role });
     return accessToken;
   } catch (e) {
     console.error(e);
@@ -35,7 +35,7 @@ export const registerUserService = async (userDataObj) => {
   }
 };
 
-export const generateAccessToken = (email) => {
-  const accessToken = jwt.sign(email, process.env.AUTH_TOKEN);
+export const generateAccessToken = (userObj) => {
+  const accessToken = jwt.sign(userObj, process.env.AUTH_TOKEN);
   return accessToken;
 };

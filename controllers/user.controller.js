@@ -8,7 +8,8 @@ import bcryptjs from "bcryptjs";
 export const loginUserController = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const result = await UserModel.find({ email: req.body.email });
+    langoLogger.info(`Attemping to login user with email: ${email}`);
+    const result = await UserModel.find({ email });
     if (result.length > 1) {
       return res
         .status(409)
@@ -24,6 +25,7 @@ export const loginUserController = async (req, res) => {
       return res.status(403).json({ error: "Invalied Email or Password" });
     }
     const accessToken = await loginUserService(req.body);
+    langoLogger.info("Successfully generated access token for user");
     res.status(200).json({ accessToken });
   } catch (e) {
     console.error(e);
