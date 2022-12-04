@@ -1,6 +1,6 @@
-import { fetchAllRolesFromDb } from './../Model/user.db';
+import { fetchAllRolesFromDb } from '../Model/user.db';
 
-const fetchAllRolesController = async (req, res) => {
+export const fetchAllRolesController = async (req, res) => {
   try {
     yekolaLogger.info("Fetching all roles - controller");
     const response = await fetchAllRolesFromDb();
@@ -12,4 +12,3 @@ const fetchAllRolesController = async (req, res) => {
   }
 };
 
-export default fetchAllRolesController;

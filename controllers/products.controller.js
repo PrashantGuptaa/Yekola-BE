@@ -1,6 +1,6 @@
-import { fetchAllProductsFromDb } from './../Model/user.db';
+import { fetchAllProductsFromDb } from '../Model/user.db';
 
-const fetchAllProductsController = async (req, res) => {
+export const fetchAllProductsController = async (req, res) => {
   try {
     yekolaLogger.info("Fetching all products - controller");
     const response = await fetchAllProductsFromDb();
@@ -11,5 +11,3 @@ const fetchAllProductsController = async (req, res) => {
     res.status(500).json(e.message);
   }
 };
-
-export default fetchAllProductsController;
