@@ -4,7 +4,8 @@ import { generateAppTokenHmsService } from "../../services/hmsService/appHms.ser
 const fetchHmsRoomAppTokenController = async (req, res) => {
   try {
     const user = req.user;
-    yekolaLogger.info(`Fetching Access token for HMS-Room for userObj ${user}`);
+    console.log("User",user);
+    yekolaLogger.info(`Fetching Access token for HMS-Room for userObj`, user);
     const roomId = _.get(req.params, ["roomId"]);
     // const description = _.get(req.body, ["description"]);
     const { activeRole, userName } = user;

@@ -18,19 +18,56 @@ export const addUserToDb = async (email, userName, password, roles, name) => {
 };
 
 export const getUserDetailsFromDb = async (userName) => {
-    try {
-      yekolaLogger.info(`Fetching user details for user: ${userName} from DB`);
-      const selectQuery = {
-        text: "SELECT * FROM public.users WHERE user_name=$1",
-        values: [userName],
-      };
-  
-      const result = await postgresClientConnection.query(selectQuery);
-      console.log(result.rows);
-      yekolaLogger.info(`Successfully fetched user: ${userName} from DB`, result.rows);
-      return result.rows;
-    } catch (e) {
-      yekolaLogger.error(`Error while fetching user from db: ${e.message}`);
-      throw new Error(e);
-    }
-  };
+  try {
+    yekolaLogger.info(`Fetching user details for user: ${userName} from DB`);
+    const selectQuery = {
+      text: "SELECT * FROM public.users WHERE user_name=$1",
+      values: [userName],
+    };
+
+    const result = await postgresClientConnection.query(selectQuery);
+    console.log(result.rows);
+    yekolaLogger.info(
+      `Successfully fetched user: ${userName} from DB`,
+      result.rows
+    );
+    return result.rows;
+  } catch (e) {
+    yekolaLogger.error(`Error while fetching user from db: ${e.message}`);
+    throw new Error(e);
+  }
+};
+
+export const fetchAllRolesFromDb = async () => {
+  try {
+    yekolaLogger.info(`Fetching all roles from DB`);
+    const selectQuery = {
+      text: "SELECT * FROM public.roles",
+      values: [],
+    };
+
+    const result = await postgresClientConnection.query(selectQuery);
+    yekolaLogger.info(`Successfully fetched all available roles from db`);
+    return result.rows;
+  } catch (e) {
+    yekolaLogger.error(`Error while fetching user roles from db: ${e.message}`);
+    throw new Error(e);
+  }
+};
+
+export const fetchAllProductsFromDb = async () => {
+  try {
+    yekolaLogger.info(`Fetching all products from DB`);
+    const selectQuery = {
+      text: "SELECT * FROM public.products",
+      values: [],
+    };
+
+    const result = await postgresClientConnection.query(selectQuery);
+    yekolaLogger.info(`Successfully fetched all available products from db`);
+    return result.rows;
+  } catch (e) {
+    yekolaLogger.error(`Error while fetching user roles from db: ${e.message}`);
+    throw new Error(e);
+  }
+};

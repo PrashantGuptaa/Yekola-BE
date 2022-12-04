@@ -28,7 +28,7 @@ global.yekolaLogger = winstonLogger;
 mongoDbConnection();
 
 app.use("/api/v1", router);
-app.use("/api/hms/v1", hmsRouter);
+app.use("/api/v1", hmsRouter);
 
 
 const PORT = process.env.APP_PORT || 5001;
