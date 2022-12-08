@@ -72,14 +72,31 @@ export const fetchAllProductsFromDb = async () => {
   }
 };
 
-export const addRoomInformationToDb = async (name, description, roomId, appId, product, createdBy) => {
+export const addRoomInformationToDb = async (
+  name,
+  description,
+  roomId,
+  appId,
+  product,
+  createdBy
+) => {
   try {
     yekolaLogger.info(`FAdding room information to DB`);
     const insertDate = new Date();
     const selectQuery = {
       text: `INSERT INTO public.hms_rooms(name, description, room_id, app_id, product, created_by, last_updated_by, is_soft_deleted, enabled, last_updated, created_on) 
       VALUES($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, $9) RETURNING *`,
-      values: [name, description, roomId, appId, product, createdBy, false, true, insertDate],
+      values: [
+        name,
+        description,
+        roomId,
+        appId,
+        product,
+        createdBy,
+        false,
+        true,
+        insertDate,
+      ],
     };
 
     const result = await postgresClientConnection.query(selectQuery);
@@ -89,7 +106,7 @@ export const addRoomInformationToDb = async (name, description, roomId, appId, p
     yekolaLogger.error(`Error while fetching user roles from db: ${e.message}`);
     throw new Error(e);
   }
-}
+};
 
 export const listHmsRoomsFromDb = async (product) => {
   try {
@@ -106,5 +123,5 @@ export const listHmsRoomsFromDb = async (product) => {
   } catch (e) {
     yekolaLogger.error(`Error while fetching user roles from db: ${e.message}`);
     throw new Error(e);
-  } 
-}
+  }
+};
