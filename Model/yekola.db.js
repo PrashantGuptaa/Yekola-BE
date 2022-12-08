@@ -26,7 +26,6 @@ export const getUserDetailsFromDb = async (userName) => {
     };
 
     const result = await postgresClientConnection.query(selectQuery);
-    console.log(result.rows);
     yekolaLogger.info(
       `Successfully fetched user: ${userName} from DB`,
       result.rows
@@ -113,7 +112,7 @@ export const listHmsRoomsFromDb = async (product) => {
     yekolaLogger.info(`Fetching room list from DB`);
     const insertDate = new Date();
     const selectQuery = {
-      text: `SELECT * FROM public.hms_rooms WHERE product=$1 AND is_soft_deleted=false`,
+      text: `SELECT id, name, description, created_by, instructor FROM public.hms_rooms WHERE product ILIKE $1 AND is_soft_deleted=false AND enabled=true ORDER BY last_updated DESC`,
       values: [product],
     };
 
