@@ -6,11 +6,19 @@ const createHmsRoomsController = async (req, res) => {
     yekolaLogger.info("Creating HMS Rooms");
     const name = _.get(req.body, ["name"]);
     const description = _.get(req.body, ["description"]);
-    const response = await createHmsRoomService(name, description);
+    const productName = _.get(req.body, ["product"]);
+    const userName = _.get(req, ["user", "userName"]);
+
+    const response = await createHmsRoomService(
+      name,
+      description,
+      productName,
+      userName
+    );
     yekolaLogger.info("Successfully created HMS Room");
     res.status(201).json(response);
   } catch (e) {
-    yekolaLogger.error(e.message);
+    yekolaLogger.error(e.description);
     res.status(500).json(e.message);
   }
 };

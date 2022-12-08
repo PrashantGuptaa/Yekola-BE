@@ -6,12 +6,14 @@ import {
 } from "../../controllers/user.controller";
 import { fetchAllRolesController } from "../../controllers/roles.controller";
 import { fetchAllProductsController } from "../../controllers/products.controller";
+import { listRoomsController } from "../../controllers/listRooms.controller";
 
 const router = express.Router();
 
 router.get("/", healthController);
 router.get("/fetch-all-roles", fetchAllRolesController);
 router.get("/fetch-all-products", fetchAllProductsController);
+router.get("/list-rooms/:product", listRoomsController);
 
 router.post("/login", loginUserController);
 router.post("/register", registerUserController);

@@ -71,3 +71,40 @@ export const fetchAllProductsFromDb = async () => {
     throw new Error(e);
   }
 };
+
+export const addRoomInformationToDb = async (name, description, roomId, appId, product, createdBy) => {
+  try {
+    yekolaLogger.info(`FAdding room information to DB`);
+    const insertDate = new Date();
+    const selectQuery = {
+      text: `INSERT INTO public.hms_rooms(name, description, room_id, app_id, product, created_by, last_updated_by, is_soft_deleted, enabled, last_updated, created_on) 
+      VALUES($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, $9) RETURNING *`,
+      values: [name, description, roomId, appId, product, createdBy, false, true, insertDate],
+    };
+
+    const result = await postgresClientConnection.query(selectQuery);
+    yekolaLogger.info(`Successfully added room information to DB`);
+    return result.rows;
+  } catch (e) {
+    yekolaLogger.error(`Error while fetching user roles from db: ${e.message}`);
+    throw new Error(e);
+  }
+}
+
+export const listHmsRoomsFromDb = async (product) => {
+  try {
+    yekolaLogger.info(`Fetching room list from DB`);
+    const insertDate = new Date();
+    const selectQuery = {
+      text: `SELECT * FROM public.hms_rooms WHERE product=$1 AND is_soft_deleted=false`,
+      values: [product],
+    };
+
+    const result = await postgresClientConnection.query(selectQuery);
+    yekolaLogger.info(`Successfully fetched list of rooms from DB`);
+    return result.rows;
+  } catch (e) {
+    yekolaLogger.error(`Error while fetching user roles from db: ${e.message}`);
+    throw new Error(e);
+  } 
+}

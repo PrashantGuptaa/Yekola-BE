@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { v4 } from "uuid";
 import axios from "axios";
 import HttpServices from "../HttpServices/http.service";
+import { addRoomInformationToDb } from "../../Model/yekola.db";
 
 const generateHmsManagementToken = async () => {
   try {
@@ -31,13 +32,13 @@ const generateHmsManagementToken = async () => {
   }
 };
 
-export const createHmsRoomService = async (name, description) => {
+export const createHmsRoomService = async (name, description, product, userName) => {
   try {
     yekolaLogger.info("Attempting to create HMS Room");
     const HMS_URL = process.env.HMS_URL;
     const TEMPLATE_ID = process.env.HMS_TEMPLATE_ID;
     const HMS_REGION = process.env.HMS_REGION;
-    const roomName = `${name || "Lango-rooms"}-${v4()}`;
+    const roomName = `${name || "Yekola-rooms"}___${v4()}`;
     const roomDesciption = description || "Default-Description";
     const data = JSON.stringify({
       name: roomName,
@@ -51,10 +52,13 @@ export const createHmsRoomService = async (name, description) => {
       Authorization: `Bearer ${accessToken}`,
     };
     const response = await HttpServices.postRequest(HMS_URL, data, headers);
+    const { id: room_id, app_id, } = response.data;
+    const result = await addRoomInformationToDb(name, description, room_id, app_id, product, userName)
     yekolaLogger.info("Successfully created HMS Room - HMS Service");
-    return response.data;
+    return result[0];
   } catch (e) {
-    yekolaLogger.error(`Error while creating HMS Room: ${e.message}`);
+    console.error(e);
+    yekolaLogger.error(`Error while creating HMS Room`,e.name, e.message, e.cause);
     throw new Error(e);
   }
 };
@@ -76,3 +80,4 @@ export const listHmsRoomsService = async () => {
     throw new Error(e);
   }
 };
+

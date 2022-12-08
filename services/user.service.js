@@ -1,9 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
-import mongoose from "mongoose";
-import { userSchema } from "../Schema/user.schema";
-import { UserModel } from "../Model/user.model";
-import { addUserToDb } from "../Model/user.db";
+import { addUserToDb } from "../Model/yekola.db";
 import { getHigestPermissionRoleAmongAll } from "../utils/utils";
 
 export const loginUserService = async (userDataObj) => {

@@ -1,4 +1,4 @@
-import { fetchAllRolesFromDb } from '../Model/user.db';
+import { fetchAllRolesFromDb } from '../Model/yekola.db';
 
 export const fetchAllRolesController = async (req, res) => {
   try {

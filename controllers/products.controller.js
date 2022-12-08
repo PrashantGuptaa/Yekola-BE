@@ -1,4 +1,4 @@
-import { fetchAllProductsFromDb } from '../Model/user.db';
+import { fetchAllProductsFromDb } from '../Model/yekola.db';
 
 export const fetchAllProductsController = async (req, res) => {
   try {

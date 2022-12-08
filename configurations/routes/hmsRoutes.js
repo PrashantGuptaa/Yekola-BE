@@ -9,7 +9,7 @@ const hmsRouter = express.Router();
 
 // hmsRouter.get('/token', generateAccessTokenForHms);
 hmsRouter.post("/create-rooms", authenticate, createHmsRoomsController);
-hmsRouter.get("/list-rooms", authenticate, listHmsRoomsController);
+hmsRouter.get("/list-hms-rooms", authenticate, listHmsRoomsController);
 hmsRouter.get(
   "/fetch-app-token/:roomId",
   authenticate,

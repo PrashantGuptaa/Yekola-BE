@@ -2,9 +2,8 @@ import {
   loginUserService,
   registerUserService,
 } from "../services/user.service";
-import { UserModel } from "./../Model/user.model";
 import bcryptjs from "bcryptjs";
-import { getUserDetailsFromDb } from "../Model/user.db";
+import { getUserDetailsFromDb } from "../Model/yekola.db";
 import {
   INVALID_DETAILS,
   MULTIPLE_ACCOUNT_EXISTS,
