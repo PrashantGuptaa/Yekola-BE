@@ -8,10 +8,11 @@ const fetchHmsRoomAppTokenController = async (req, res) => {
     yekolaLogger.info(`Fetching Access token for HMS-Room for userObj`, user);
     const roomId = _.get(req.params, ["roomId"]);
     // const description = _.get(req.body, ["description"]);
-    const { activeRole, userName } = user;
-    const hmsAppAccessToken = await generateAppTokenHmsService(roomId, userName, activeRole);
+    const { activeRole, userName, name } = user;
+    console.log("Active Role", activeRole);
+    const authToken = await generateAppTokenHmsService(roomId, userName, activeRole);
     yekolaLogger.info("Successfully fetched access token for HMS Room");
-    res.status(200).json({ hmsAppAccessToken });
+    res.status(200).json({ authToken, name });
   } catch (e) {
     yekolaLogger.error(e.message);
     res.status(500).json(e.message);

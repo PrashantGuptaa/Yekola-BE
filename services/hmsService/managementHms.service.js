@@ -44,8 +44,8 @@ export const createHmsRoomService = async (
     const HMS_URL = process.env.HMS_URL;
     const TEMPLATE_ID = process.env.HMS_TEMPLATE_ID;
     const HMS_REGION = process.env.HMS_REGION;
-    const roomName = `${name || "Yekola-rooms"}___${v4()}`;
-    const roomDesciption = description || "Default-Description";
+    const roomName = `${name || "Yekola_rooms"}_${v4()}`;
+    const roomDesciption = description || "";
     const data = JSON.stringify({
       name: roomName,
       description: roomDesciption,

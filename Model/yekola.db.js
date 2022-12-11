@@ -112,7 +112,7 @@ export const listHmsRoomsFromDb = async (product) => {
     yekolaLogger.info(`Fetching room list from DB`);
     const insertDate = new Date();
     const selectQuery = {
-      text: `SELECT id, name, description, created_by, instructor FROM public.hms_rooms WHERE product ILIKE $1 AND is_soft_deleted=false AND enabled=true ORDER BY last_updated DESC`,
+      text: `SELECT id, room_id, name, description, created_by, instructor FROM public.hms_rooms WHERE product ILIKE $1 AND is_soft_deleted=false AND enabled=true ORDER BY last_updated DESC`,
       values: [product],
     };
 
