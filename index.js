@@ -4,10 +4,7 @@ import cors from 'cors';
 import router from './configurations/routes/routes';
 import winstonLogger from './utils/logger.js';
 import bodyParser from 'body-parser';
-import jwt from 'jsonwebtoken';
-import { mongoDbConnection } from './configurations/dbConnections/connection';
 import hmsRouter from './configurations/routes/hmsRoutes';
-import postgresClientConnection from './configurations/dbConnections/postgresConnection';
 
 config();
 const app = express();
@@ -25,7 +22,6 @@ app.use(express.json());
 
 // Global Logger
 global.yekolaLogger = winstonLogger;
-mongoDbConnection();
 
 app.use("/api/v1", router);
 app.use("/api/v1", hmsRouter);
