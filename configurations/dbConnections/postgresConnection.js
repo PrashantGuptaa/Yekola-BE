@@ -4,6 +4,8 @@ import { config } from 'dotenv';
 import pg from 'pg'
 const { Pool } = pg
 config();
+
+console.log("Connection Items: ",process.env.PG_HOST,process.env.PG_PORT)
 async function getClient() {
     try {
         const pool = new Pool({
