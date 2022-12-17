@@ -1,10 +1,10 @@
-import express from 'express';
-import { config } from 'dotenv';
-import cors from 'cors';
-import router from './configurations/routes/routes';
-import winstonLogger from './utils/logger.js';
-import bodyParser from 'body-parser';
-import hmsRouter from './configurations/routes/hmsRoutes';
+import express from "express";
+import { config } from "dotenv";
+import cors from "cors";
+import router from "./configurations/routes/routes";
+import winstonLogger from "./utils/logger.js";
+import bodyParser from "body-parser";
+import hmsRouter from "./configurations/routes/hmsRoutes";
 
 config();
 const app = express();
