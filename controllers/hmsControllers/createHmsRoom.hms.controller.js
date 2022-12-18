@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { createHmsRoomService } from "../../services/hmsService/managementHms.service";
 
-const createHmsAppTokenController = async (req, res) => {
+const createHmsRoomController = async (req, res) => {
   try {
     yekolaLogger.info("Creating HMS Rooms");
     const name = _.get(req.body, ["name"]);
@@ -15,4 +15,4 @@ const createHmsAppTokenController = async (req, res) => {
   }
 };
 
-export default createHmsAppTokenController;
+export default createHmsRoomController;

@@ -1,11 +1,11 @@
 import postgresClientConnection from "../configurations/dbConnections/postgresConnection";
 
-export const addUserToDb = async (email, userName, password, roles, name) => {
+export const addUserToDb = async (email, userName, password, role, name) => {
   try {
     yekolaLogger.info("Adding user to DB");
     const insertQuery = {
-      text: "INSERT INTO public.users(email, name, password, roles, user_name) VALUES($1, $2, $3, $4, $5)",
-      values: [email, name, password, roles, userName],
+      text: "INSERT INTO public.users(email, name, password, role, user_name) VALUES($1, $2, $3, $4, $5)",
+      values: [email, name, password, 3, userName],
     };
 
     const result = await postgresClientConnection.query(insertQuery);
@@ -21,7 +21,7 @@ export const getUserDetailsFromDb = async (userName) => {
   try {
     yekolaLogger.info(`Fetching user details for user: ${userName} from DB`);
     const selectQuery = {
-      text: "SELECT * FROM public.users WHERE user_name=$1",
+      text: "select users.id as id, name, email, user_name, password, role  FROM public.users left join roles on users.role_id =roles.id  WHERE user_name=$1",
       values: [userName],
     };
 
@@ -30,6 +30,7 @@ export const getUserDetailsFromDb = async (userName) => {
       `Successfully fetched user: ${userName} from DB`,
       result.rows
     );
+
     return result.rows;
   } catch (e) {
     yekolaLogger.error(`Error while fetching user from db: ${e.message}`);
@@ -80,7 +81,7 @@ export const addRoomInformationToDb = async (
   createdBy
 ) => {
   try {
-    yekolaLogger.info(`FAdding room information to DB`);
+    yekolaLogger.info(`Adding room information to DB`);
     const insertDate = new Date();
     const selectQuery = {
       text: `INSERT INTO public.hms_rooms(name, description, room_id, app_id, product, created_by, last_updated_by, is_soft_deleted, enabled, last_updated, created_on) 

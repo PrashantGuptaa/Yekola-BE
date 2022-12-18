@@ -1,15 +1,15 @@
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import { addUserToDb } from "../Model/yekola.db";
-import { getHigestPermissionRoleAmongAll } from "../utils/utils";
 
 export const loginUserService = async (userDataObj) => {
   try {
-    const { email, password, roles, user_name } = userDataObj;
+    const { email, role, user_name, name } = userDataObj;
     const accessToken = generateAccessToken({
-      ...userDataObj,
+      name,
       userName: user_name,
-      activeRole: getHigestPermissionRoleAmongAll(roles),
+      role,
+      email,
     });
     return accessToken;
   } catch (e) {
@@ -20,18 +20,16 @@ export const loginUserService = async (userDataObj) => {
 
 export const registerUserService = async (userDataObj) => {
   try {
-    const { email, password, roles, userName, name } = userDataObj;
+    const { email, password, role, userName, name } = userDataObj;
     const securedPassword = await bcryptjs.hash(password, 10);
     const dataObj = {
       email,
-      password: securedPassword,
       userName,
-      roles,
-      activeRole: getHigestPermissionRoleAmongAll(roles),
+      role,
       name,
     };
 
-    await addUserToDb(email, userName, securedPassword, roles, name);
+    await addUserToDb(email, userName, securedPassword, role, name);
     const accessToken = generateAccessToken(dataObj);
     return accessToken;
   } catch (e) {

@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "product": "Lingala",
+    "description": "This is a sample Description for Lingala"
+  },
+  {
+    "id": 2,
+    "product": "Swahili",
+    "description": "This is a sample Description for Swahili"
+  },
+  {
+    "id": 3,
+    "product": "Kikongo",
+    "description": "This is a sample Description for Kikongo"
+  },
+  {
+    "id": 4,
+    "product": "Tshiluba",
+    "description": "This is a sample Description for Tshiluba"
+  },
+  {
+    "id": 5,
+    "product": "KiYansi",
+    "description": "This is a sample Description for Kiyanshi"
+  }
+]

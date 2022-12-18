@@ -24,6 +24,7 @@ export const loginUserController = async (req, res) => {
     const userDetails = result[0];
     const securedPassword = userDetails.password;
     const compareResult = await bcryptjs.compare(password, securedPassword);
+    console.log("Result of User detauls ", compareResult);
     if (!compareResult) {
       return res.status(403).json({ error: INVALID_DETAILS });
     }
@@ -31,7 +32,7 @@ export const loginUserController = async (req, res) => {
     yekolaLogger.info("Successfully generated access token for user");
     res.status(200).json({ accessToken });
   } catch (e) {
-    yekolaLogger.error(e);
+    console.error(e);
     res.status(500).json({ error: e.message });
   }
 };
