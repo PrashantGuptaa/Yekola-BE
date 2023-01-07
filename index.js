@@ -5,6 +5,7 @@ import router from './configurations/routes/routes';
 import winstonLogger from './utils/logger.js';
 import bodyParser from 'body-parser';
 import hmsRouter from './configurations/routes/hmsRoutes';
+import './Model/sequelize';
 
 config();
 const app = express();

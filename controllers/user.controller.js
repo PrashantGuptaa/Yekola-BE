@@ -1,6 +1,8 @@
 import {
   loginUserService,
   registerUserService,
+  updatePasswordService,
+  userVerificationService,
 } from "../services/user.service";
 import bcryptjs from "bcryptjs";
 import { getUserDetailsFromDb } from "../Model/yekola.db";
@@ -12,21 +14,13 @@ import {
 
 export const loginUserController = async (req, res) => {
   try {
-    const { password, userName } = req.body;
+    const { userName } = req.body;
     yekolaLogger.info(`Attemping to login user with user name: ${userName}`);
-    const result = await getUserDetailsFromDb(userName);
-    if (result.length > 1) {
-      return res.status(409).json({ error: MULTIPLE_ACCOUNT_EXISTS });
-    }
-    if (result.length === 0) {
-      return res.status(404).json({ error: USER_NOT_EXIST });
-    }
-    const userDetails = result[0];
-    const securedPassword = userDetails.password;
-    const compareResult = await bcryptjs.compare(password, securedPassword);
-    console.log("Result of User detauls ", compareResult);
-    if (!compareResult) {
-      return res.status(403).json({ error: INVALID_DETAILS });
+    const { error, reason, errCode, userDetails } =
+      await userVerificationService(req.body);
+    if (error) {
+      res.status(errCode).json({ error: reason });
+      return;
     }
     const accessToken = await loginUserService(userDetails);
     yekolaLogger.info("Successfully generated access token for user");
@@ -59,3 +53,25 @@ export const registerUserController = async (req, res) => {
 
 export const getCheckUserAuthenticationController = async (req, res) =>
   res.status(200).json({ authenticated: true });
+
+export const updatePasswordController = async (req, res) => {
+  try {
+    const { userName, previousPassword, newPassword } = req.body;
+    const { error, errCode, reason } = await userVerificationService({
+      userName,
+      password: previousPassword,
+    });
+    if (error) {
+      res.status(errCode).json({ error: reason });
+      return;
+    }
+
+    yekolaLogger.info("Updating Password after user validation");
+    await updatePasswordService(userName, newPassword);
+    yekolaLogger.info(`Succesfully Updated Password for user: ${userName}`);
+    res.status(200).json({ success: true });
+  } catch (e) {
+    yekolaLogger.error(e);
+    res.status(500).json({ error: e.message });
+  }
+};

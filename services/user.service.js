@@ -1,6 +1,12 @@
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
-import { addUserToDb } from "../Model/yekola.db";
+import { addUserToDb, getUserDetailsFromDb } from "../Model/yekola.db";
+import {
+  INVALID_DETAILS,
+  MULTIPLE_ACCOUNT_EXISTS,
+  USER_NOT_EXIST,
+} from "../configurations/constants/configMessages";
+import database from "../Model/sequelize";
 
 export const loginUserService = async (userDataObj) => {
   try {
@@ -21,7 +27,7 @@ export const loginUserService = async (userDataObj) => {
 export const registerUserService = async (userDataObj) => {
   try {
     const { email, password, role, userName, name } = userDataObj;
-    const securedPassword = await bcryptjs.hash(password, 10);
+    const securedPassword = await generateHashedPassword(password);
     const dataObj = {
       email,
       userName,
@@ -39,6 +45,57 @@ export const registerUserService = async (userDataObj) => {
 };
 
 export const generateAccessToken = (userObj) => {
-  const accessToken = jwt.sign(userObj, process.env.AUTH_TOKEN);
+  const accessToken = jwt.sign(userObj, process.env.AUTH_TOKEN, {
+    exp: Math.floor(Date.now() / 1000) + 30 * 1,
+  });
   return accessToken;
+};
+
+export const updatePasswordService = async (userName, newPassword) => {
+  try {
+    const { Users } = database;
+    const password = await generateHashedPassword(newPassword);
+    await Users.update(
+      {
+        password,
+      },
+      {
+        where: {
+          user_name: userName,
+        },
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error while updating password", e.message);
+  }
+};
+
+export const userVerificationService = async (userObj) => {
+  try {
+    const { password, userName } = userObj;
+    const result = await getUserDetailsFromDb(userName);
+    if (result.length > 1) {
+      return { error: true, reason: MULTIPLE_ACCOUNT_EXISTS, errCode: 409 };
+    }
+    if (result.length === 0) {
+      return { error: true, reason: USER_NOT_EXIST, errCode: 404 };
+    }
+    const userDetails = result[0];
+    const securedPassword = userDetails.password;
+    const compareResult = await bcryptjs.compare(password, securedPassword);
+    if (!compareResult) {
+      return { error: true, reason: INVALID_DETAILS, errCode: 403 };
+    }
+    return { error: false, userDetails };
+  } catch (e) {
+    console.error(e);
+    yekolaLogger.error("Error while verifying User", e.message);
+    throw new Error(e.message);
+  }
+};
+
+const generateHashedPassword = async (password) => {
+  const securedPassword = await bcryptjs.hash(password, 10);
+  return securedPassword;
 };

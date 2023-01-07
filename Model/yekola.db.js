@@ -142,3 +142,5 @@ export const listHmsRoomsFromDb = async (product) => {
     throw new Error(e);
   }
 };
+
+// export const updatePass

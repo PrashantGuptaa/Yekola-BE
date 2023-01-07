@@ -3,7 +3,8 @@ import healthController from "../../controllers/health.controller";
 import {
   loginUserController,
   registerUserController,
-  getCheckUserAuthenticationController
+  getCheckUserAuthenticationController,
+  updatePasswordController
 } from "../../controllers/user.controller";
 import { fetchAllRolesController } from "../../controllers/roles.controller";
 import { fetchAllProductsController } from "../../controllers/products.controller";
@@ -22,5 +23,6 @@ router.get("/create-room-auth", authenticate, getShowCreateRoomBtnController);
 router.post("/login", loginUserController);
 router.post("/register", registerUserController);
 router.get('/user/validation/', authenticate, getCheckUserAuthenticationController);
+router.post('/user/update-password', updatePasswordController);
 
 export default router;
