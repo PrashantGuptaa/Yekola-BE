@@ -1,21 +1,28 @@
 import jwt from "jsonwebtoken";
-import { MISSING_TOKEN, TOKEN_EXPIRED } from "../configurations/constants/configMessages";
+import {
+  MISSING_TOKEN,
+  TOKEN_EXPIRED,
+} from "../configurations/constants/configMessages";
 
 export const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers["authorization"];
     const token = authHeader?.split(" ")[1];
-    yekolaLogger.info(`Checking user authenticity`)
-    if (!token) return res.status(401).json({ error: MISSING_TOKEN });
+    yekolaLogger.info(`Validating token`);
+    if (!token)
+      return res
+        .status(401)
+        .json({ error: MISSING_TOKEN, authenticated: false });
 
     jwt.verify(token, process.env.AUTH_TOKEN, (err, user) => {
-      if (err){
+      if (err) {
         yekolaLogger.error(err);
         return res
           .status(403)
-          .json({ error: TOKEN_EXPIRED });
-          }
+          .json({ error: TOKEN_EXPIRED, authenticated: false });
+      }
       req.user = user;
+      yekolaLogger.info(`Successfully validated token`);
       next();
     });
   } catch (e) {

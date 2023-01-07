@@ -33,13 +33,10 @@ const generateHmsManagementToken = async () => {
   }
 };
 
-export const createHmsRoomService = async (
-  name,
-  description,
-  product,
-  userName
-) => {
+export const createHmsRoomService = async (userRoomInfoObj, userName) => {
   try {
+    const { name, description, product, dateStr, date, timeStr, time } =
+      userRoomInfoObj;
     yekolaLogger.info("Attempting to create HMS Room");
     const HMS_URL = process.env.HMS_URL;
     const TEMPLATE_ID = process.env.HMS_TEMPLATE_ID;
@@ -58,6 +55,8 @@ export const createHmsRoomService = async (
       Authorization: `Bearer ${accessToken}`,
     };
     const response = await HttpServices.postRequest(HMS_URL, data, headers);
+
+    yekolaLogger.info("Successfully created room in HMS Platform, Proceeding to save information in DB");
     const { id: room_id, app_id } = response.data;
     const result = await addRoomInformationToDb(
       roomName,
@@ -65,6 +64,10 @@ export const createHmsRoomService = async (
       room_id,
       app_id,
       product,
+      JSON.stringify(date),
+      dateStr,
+      JSON.stringify(time),
+      timeStr,
       userName
     );
     const roomObj = extractUsefulRoomInformation(result[0]);

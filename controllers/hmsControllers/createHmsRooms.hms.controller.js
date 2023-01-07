@@ -4,15 +4,10 @@ import { createHmsRoomService } from "../../services/hmsService/managementHms.se
 const createHmsRoomsController = async (req, res) => {
   try {
     yekolaLogger.info("Creating HMS Rooms");
-    const name = _.get(req.body, ["name"]);
-    const description = _.get(req.body, ["description"]);
-    const productName = _.get(req.body, ["product"]);
     const userName = _.get(req, ["user", "userName"]);
 
     const response = await createHmsRoomService(
-      name,
-      description,
-      productName,
+      req.body,
       userName
     );
     yekolaLogger.info("Successfully created HMS Room");

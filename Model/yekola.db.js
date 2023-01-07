@@ -78,14 +78,27 @@ export const addRoomInformationToDb = async (
   roomId,
   appId,
   product,
+  date,
+  dateStr,
+  time,
+  timeStr,
   createdBy
 ) => {
   try {
-    yekolaLogger.info(`Adding room information to DB`);
+    yekolaLogger.info(`Adding room information to DB`,   name,
+    description,
+    roomId,
+    appId,
+    product,
+    date,
+    dateStr,
+    time,
+    timeStr,
+    createdBy);
     const insertDate = new Date();
     const selectQuery = {
-      text: `INSERT INTO public.hms_rooms(name, description, room_id, app_id, product, created_by, last_updated_by, is_soft_deleted, enabled, last_updated, created_on) 
-      VALUES($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, $9) RETURNING *`,
+      text: `INSERT INTO public.hms_rooms(name, description, room_id, app_id, product, created_by, last_updated_by, is_soft_deleted, enabled, last_updated, created_on, date, date_str, time, time_str) 
+      VALUES($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, $9, $10, $11, $12, $13) RETURNING *`,
       values: [
         name,
         description,
@@ -96,6 +109,10 @@ export const addRoomInformationToDb = async (
         false,
         true,
         insertDate,
+        date,
+        dateStr,
+        time,
+        timeStr
       ],
     };
 
@@ -103,7 +120,7 @@ export const addRoomInformationToDb = async (
     yekolaLogger.info(`Successfully added room information to DB`);
     return result.rows;
   } catch (e) {
-    yekolaLogger.error(`Error while fetching user roles from db: ${e.message}`);
+    yekolaLogger.error(`Error while adding room information to db: ${e.message}`);
     throw new Error(e);
   }
 };
@@ -113,7 +130,7 @@ export const listHmsRoomsFromDb = async (product) => {
     yekolaLogger.info(`Fetching room list from DB`);
     const insertDate = new Date();
     const selectQuery = {
-      text: `SELECT id, room_id, name, description, created_by, instructor FROM public.hms_rooms WHERE product ILIKE $1 AND is_soft_deleted=false AND enabled=true ORDER BY last_updated DESC`,
+      text: `SELECT * FROM public.hms_rooms WHERE product ILIKE $1 AND is_soft_deleted=false AND enabled=true ORDER BY last_updated DESC`,
       values: [product],
     };
 

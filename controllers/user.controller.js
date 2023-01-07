@@ -56,3 +56,6 @@ export const registerUserController = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
+
+export const getCheckUserAuthenticationController = async (req, res) =>
+  res.status(200).json({ authenticated: true });
