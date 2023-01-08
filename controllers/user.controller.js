@@ -11,6 +11,7 @@ import {
   MULTIPLE_ACCOUNT_EXISTS,
   USER_NOT_EXIST,
 } from "../configurations/constants/configMessages";
+import _ from 'lodash';
 
 export const loginUserController = async (req, res) => {
   try {
@@ -23,8 +24,10 @@ export const loginUserController = async (req, res) => {
       return;
     }
     const accessToken = await loginUserService(userDetails);
+    console.log(req.user, userDetails);
+    const role = _.get(userDetails, ['role']);
     yekolaLogger.info("Successfully generated access token for user");
-    res.status(200).json({ accessToken });
+    res.status(200).json({ accessToken, role });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: e.message });

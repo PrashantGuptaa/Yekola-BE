@@ -14,14 +14,15 @@ export const authenticate = async (req, res, next) => {
         .status(401)
         .json({ error: MISSING_TOKEN, authenticated: false });
 
-    jwt.verify(token, process.env.AUTH_TOKEN, (err, user) => {
+    jwt.verify(token, process.env.AUTH_TOKEN, (err, userData) => {
       if (err) {
         yekolaLogger.error(err);
         return res
           .status(403)
           .json({ error: TOKEN_EXPIRED, authenticated: false });
       }
-      req.user = user;
+      // console.log("========================", user, '======================')
+      req.user = userData.data;
       yekolaLogger.info(`Successfully validated token`);
       next();
     });

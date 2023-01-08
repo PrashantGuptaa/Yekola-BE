@@ -19,8 +19,8 @@ export const loginUserService = async (userDataObj) => {
     });
     return accessToken;
   } catch (e) {
-    yekolaLogger.error(e);
-    throw new Error("Error in Login User Service");
+    yekolaLogger.error(e.message);
+    throw new Error("Error in Login User Service", e.message);
   }
 };
 
@@ -45,8 +45,10 @@ export const registerUserService = async (userDataObj) => {
 };
 
 export const generateAccessToken = (userObj) => {
-  const accessToken = jwt.sign(userObj, process.env.AUTH_TOKEN, {
+  const accessToken = jwt.sign({data: userObj,
+  
     exp: Math.floor(Date.now() / 1000) + 30 * 1,
+  }, process.env.AUTH_TOKEN, {
   });
   return accessToken;
 };
@@ -73,6 +75,7 @@ export const updatePasswordService = async (userName, newPassword) => {
 
 export const userVerificationService = async (userObj) => {
   try {
+    yekolaLogger.info(`Verifying User details for user: ${userObj}`);
     const { password, userName } = userObj;
     const result = await getUserDetailsFromDb(userName);
     if (result.length > 1) {
@@ -87,6 +90,7 @@ export const userVerificationService = async (userObj) => {
     if (!compareResult) {
       return { error: true, reason: INVALID_DETAILS, errCode: 403 };
     }
+    yekolaLogger.info("Successfully verfied user");
     return { error: false, userDetails };
   } catch (e) {
     console.error(e);

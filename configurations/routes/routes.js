@@ -15,9 +15,9 @@ import { authenticate } from "../../middlewares/authenticate";
 const router = express.Router();
 
 router.get("/", healthController);
-router.get("/fetch-all-roles", fetchAllRolesController);
-router.get("/fetch-all-products", fetchAllProductsController);
-router.get("/list-rooms/:product", listRoomsController);
+router.get("/fetch-all-roles",authenticate, fetchAllRolesController);
+router.get("/fetch-all-products",authenticate, fetchAllProductsController);
+router.get("/list-rooms/:product",authenticate, listRoomsController);
 router.get("/create-room-auth", authenticate, getShowCreateRoomBtnController);
 
 router.post("/login", loginUserController);
