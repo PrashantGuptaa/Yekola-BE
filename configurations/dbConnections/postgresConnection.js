@@ -24,7 +24,7 @@ async function getClient() {
 
 }
 
-const postgresClientConnection  = await getClient();
+const postgresClientConnection  =' await getClient()';
 
 
 

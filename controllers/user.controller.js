@@ -5,7 +5,7 @@ import {
   userVerificationService,
 } from "../services/user.service";
 import { getUserDetailsFromDb } from "../Model/yekola.db";
-import _ from 'lodash';
+import _ from "lodash";
 
 export const loginUserController = async (req, res) => {
   try {
@@ -19,7 +19,7 @@ export const loginUserController = async (req, res) => {
     }
     const accessToken = await loginUserService(userDetails);
     console.log(req.user, userDetails);
-    const role = _.get(userDetails, ['role']);
+    const role = _.get(userDetails, ["role"]);
     yekolaLogger.info("Successfully generated access token for user");
     res.status(200).json({ accessToken, role });
   } catch (e) {
