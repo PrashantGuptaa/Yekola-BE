@@ -11,6 +11,7 @@ import { fetchAllProductsController } from "../../controllers/products.controlle
 import { listRoomsController } from "../../controllers/listRooms.controller";
 import getShowCreateRoomBtnController from "../../controllers/getShowCreateRoomBtn.controller";
 import { authenticate } from "../../middlewares/authenticate";
+import { checkIfRoomEditAllowedMiddleware } from "../../middlewares/checkIfRoomEditAllowed.middleware";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get("/", healthController);
 router.get("/fetch-all-roles",authenticate, fetchAllRolesController);
 router.get("/fetch-all-products",authenticate, fetchAllProductsController);
 router.get("/list-rooms/:product",authenticate, listRoomsController);
-router.get("/create-room-auth", authenticate, getShowCreateRoomBtnController);
+router.get("/create-room-auth", authenticate, checkIfRoomEditAllowedMiddleware, getShowCreateRoomBtnController);
 
 router.post("/login", loginUserController);
 router.post("/register", registerUserController);

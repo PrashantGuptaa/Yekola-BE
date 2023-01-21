@@ -6,6 +6,10 @@ const UsersModel = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         required: true,
       },
+      userName: {
+        type: DataTypes.STRING,
+        required: true,
+      },
       email: {
         type: DataTypes.STRING,
         required: true,
@@ -17,6 +21,10 @@ const UsersModel = (sequelize, DataTypes) => {
       role_id: {
         type: DataTypes.INTEGER,
         required: true,
+      },
+      room_edit_allowed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       updatedAt: {
         type: DataTypes.DATE,

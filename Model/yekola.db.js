@@ -21,7 +21,7 @@ export const getUserDetailsFromDb = async (userName) => {
   try {
     yekolaLogger.info(`Fetching user details for user: ${userName} from DB`);
     const selectQuery = {
-      text: "select users.id as id, name, email, user_name, password, role  FROM public.users left join roles on users.role_id =roles.id  WHERE user_name=$1",
+      text: "select users.id as id, name, email, user_name, password, role, room_edit_allowed  FROM public.users left join roles on users.role_id =roles.id  WHERE user_name=$1",
       values: [userName],
     };
 

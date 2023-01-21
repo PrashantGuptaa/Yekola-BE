@@ -4,13 +4,7 @@ import {
   updatePasswordService,
   userVerificationService,
 } from "../services/user.service";
-import bcryptjs from "bcryptjs";
 import { getUserDetailsFromDb } from "../Model/yekola.db";
-import {
-  INVALID_DETAILS,
-  MULTIPLE_ACCOUNT_EXISTS,
-  USER_NOT_EXIST,
-} from "../configurations/constants/configMessages";
 import _ from 'lodash';
 
 export const loginUserController = async (req, res) => {
