@@ -22,6 +22,10 @@ const UsersModel = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         required: true,
       },
+      room_edit_allowed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       updatedAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

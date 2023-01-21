@@ -21,7 +21,6 @@ export const authenticate = async (req, res, next) => {
           .status(403)
           .json({ error: TOKEN_EXPIRED, authenticated: false });
       }
-      // console.log("========================", user, '======================')
       req.user = userData.data;
       yekolaLogger.info(`Successfully validated token`);
       next();

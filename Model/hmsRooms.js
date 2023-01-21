@@ -38,20 +38,12 @@ const HmsRoomsModel = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-      start_date: {
-        type: DataTypes.STRING,
+      start_date_time: {
+        type: DataTypes.DATE,
         required: true,
       },
-      end_date: {
-        type: DataTypes.STRING,
-        required: true,
-      },
-      start_time: {
-        type: DataTypes.STRING,
-        required: true,
-      },
-      end_time: {
-        type: DataTypes.STRING,
+      end_date_time: {
+        type: DataTypes.DATE,
         required: true,
       },
       last_updated_by: {

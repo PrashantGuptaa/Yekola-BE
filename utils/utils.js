@@ -1,38 +1,28 @@
+import  moment  from 'moment';
+
 export const extractUsefulRoomInformation = (roomObj) => {
   const {
-    id,
     room_id: roomId,
     name,
     description,
     created_by: createdBy,
     instructor,
-    date_str,
-    date,
-    time_str,
-    time,
-    start_date: startDate,
-    end_date:endDate,
-    start_time:startTime,
-    end_time:endTime,
+    start_date_time: startDateTime,
+    end_date_time:endDateTime,
   } = roomObj;
-  const dateStr = date_str && JSON.parse(date_str);
-  const timeStr = time_str && JSON.parse(time_str);
+  let updatedName = name.slice(0, name.lastIndexOf("_"));
+  updatedName = updatedName.replace(/_/g, ' ');
   return {
     roomId,
     // name: getRoomName(name),
-    name: name.slice(0, name.indexOf("_")),
+    name: updatedName,
     description,
     createdBy,
     instructor,
     loading: false,
-    disabled: isRoomDisabled(    startDate,
-      endDate,
-      startTime,
-      endTime,),
-    startDate,
-    endDate,
-    startTime,
-    endTime,
+    disabled: isRoomDisabled(startDateTime, endDateTime),
+    startDateTime,
+    endDateTime,
     // dateStr,
     // timeStr,
     // date: date && JSON.parse(date),
@@ -48,12 +38,11 @@ export const extractUsefulRoomInformation = (roomObj) => {
 
 export const replaceAllfromString = (str, search, replace) => {
   while (str.includes(search)) {
+    console.log("============= Updating Str ===============", str, search, replace);
     str.replace(search, replace);
   }
   return str;
 };
 
-const isRoomDisabled = (dateStr, timeStr) => {
-const date = new Date();
-console.log(date, dateStr, timeStr)
-}
+const isRoomDisabled = (start, end) => moment().isBetween(start, end, 'm');
+

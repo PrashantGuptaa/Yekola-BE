@@ -3,7 +3,10 @@ import { v4 } from "uuid";
 import axios from "axios";
 import HttpServices from "../HttpServices/http.service";
 import { addRoomInformationToDb } from "../../Model/yekola.db";
-import { extractUsefulRoomInformation } from "../../utils/utils";
+import {
+  extractUsefulRoomInformation,
+  replaceAllfromString,
+} from "../../utils/utils";
 import database from "../../Model/sequelize";
 import _ from "lodash";
 
@@ -37,13 +40,13 @@ const generateHmsManagementToken = async () => {
 
 export const createHmsRoomService = async (userRoomInfoObj, userName) => {
   try {
-    const { name, description, product, startTime, endTime, startDate, endDate } =
+    const { name, description, product, startDateTime, endDateTime } =
       userRoomInfoObj;
     yekolaLogger.info(`Attempting to create HMS Room`, userRoomInfoObj);
     const HMS_URL = process.env.HMS_URL;
     const TEMPLATE_ID = process.env.HMS_TEMPLATE_ID;
     const HMS_REGION = process.env.HMS_REGION;
-    const roomName = `${name || "Yekola_rooms"}_${v4()}`;
+    const roomName = updatedRoomName(name);
     const roomDesciption = description || "";
     const data = JSON.stringify({
       name: roomName,
@@ -56,47 +59,32 @@ export const createHmsRoomService = async (userRoomInfoObj, userName) => {
     const headers = {
       Authorization: `Bearer ${accessToken}`,
     };
-    // const response = await HttpServices.postRequest(HMS_URL, data, headers);
+    const response = await HttpServices.postRequest(HMS_URL, data, headers);
 
-    yekolaLogger.info("Successfully created room in HMS Platform, Proceeding to save information in DB");
-    // const { id: room_id, app_id } = response.data;
+    yekolaLogger.info(
+      "Successfully created room in HMS Platform, Proceeding to save information in DB"
+    );
+    const { id: room_id, app_id } = response.data;
     const result = await database.Rooms.create({
       name: roomName,
       description: roomDesciption,
-      room_id: "123456",
-      app_id: "--App-ID--",
+      room_id,
+      app_id,
       product,
-      start_date: startDate,
-      end_date:endDate,
-      start_time:startTime,
-      end_time:endTime,
+      start_date_time: startDateTime,
+      end_date_time: endDateTime,
       instructor: userName,
       last_updated_by: userName,
-      created_by: userName
+      created_by: userName,
+    });
 
-    })
-    // const result = await addRoomInformationToDb(
-    //   roomName,
-    //   roomDesciption,
-    //   room_id,
-    //   app_id,
-    //   product,
-    //   JSON.stringify(startDate),
-    //   JSON.stringify(endDate),
-    //   JSON.stringify(startTime),
-    //   JSON.stringify(endTime),
-    //   userName
-    // );
-    console.log('===========================' ,_.get(result, ['dataValues']), '==============================================');
     const roomObj = extractUsefulRoomInformation(result?.dataValues);
     yekolaLogger.info("Successfully created HMS Room - HMS Service");
 
     return roomObj;
   } catch (e) {
     console.error(e);
-    yekolaLogger.error(
-      `Error while creating HMS Room: ${e}`
-    );
+    yekolaLogger.error(`Error while creating HMS Room: ${e}`);
     throw new Error(e);
   }
 };
@@ -118,3 +106,6 @@ export const listHmsRoomsService = async () => {
     throw new Error(e);
   }
 };
+
+const updatedRoomName = (name = "Yekola Room") =>
+  `${name?.split(" ").join("_")}_${v4()}`;

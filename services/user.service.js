@@ -7,17 +7,18 @@ import {
   USER_NOT_EXIST,
 } from "../configurations/constants/configMessages";
 import database from "../Model/sequelize";
-import { STUDENT_ROLE } from './../utils/roomConstants';
+import { STUDENT_ROLE } from "./../utils/roomConstants";
 import _ from "lodash";
 
 export const loginUserService = async (userDataObj) => {
   try {
-    const { email, role, user_name, name } = userDataObj;
+    const { email, role, user_name, name, room_edit_allowed } = userDataObj;
     const accessToken = generateAccessToken({
       name,
       userName: user_name,
       role,
       email,
+      roomEditAllowed: room_edit_allowed,
     });
     return accessToken;
   } catch (e) {
@@ -39,17 +40,17 @@ export const registerUserService = async (userDataObj) => {
       name,
     };
 
-    const response = await database.Roles.findOne({where: { role }});
+    const response = await database.Roles.findOne({ where: { role } });
     console.log("Roles Response ==============", response?.dataValues?.id);
     const role_id = response?.dataValues?.id;
     // await addUserToDb(email, userName, securedPassword, role, name);
     await database.Users.create({
-      name, 
+      name,
       email,
       role_id,
       userName,
-      password: securedPassword
-    })
+      password: securedPassword,
+    });
     const accessToken = generateAccessToken(dataObj);
     yekolaLogger.info("Successfully Registered User");
     return accessToken;
@@ -66,7 +67,6 @@ export const generateAccessToken = (userObj) => {
 
       // exp: Math.floor(Date.now() / 1000) + 30 * 1, // 30 secs
       exp: Math.floor(Date.now() / 1000) + 60 * 60, // 30 secs
-
     },
     process.env.AUTH_TOKEN,
     {}
