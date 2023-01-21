@@ -10,7 +10,7 @@ async function sequelizeConnection() {
     process.env.PG_PASSWORD,
     {
       host: process.env.PG_HOST,
-      dialect: "postgres",
+      dialect: "mysql",
 
       // pool: {max: 5,min:0,idle: 10000}
     }

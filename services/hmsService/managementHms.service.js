@@ -1,11 +1,8 @@
 import jwt from "jsonwebtoken";
 import { v4 } from "uuid";
-import axios from "axios";
 import HttpServices from "../HttpServices/http.service";
-import { addRoomInformationToDb } from "../../Model/yekola.db";
 import {
   extractUsefulRoomInformation,
-  replaceAllfromString,
 } from "../../utils/utils";
 import database from "../../Model/sequelize";
 import _ from "lodash";

@@ -1,5 +1,4 @@
 import database from "../Model/sequelize";
-import { listHmsRoomsFromDb } from "../Model/yekola.db";
 import { extractUsefulRoomInformation } from "../utils/utils";
 
 export const listRoomsController = async (req, res) => {

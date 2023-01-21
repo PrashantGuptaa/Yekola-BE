@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
-import { addUserToDb, getUserDetailsFromDb } from "../Model/yekola.db";
+import { getUserDetailsFromDb } from "../Model/yekola.db";
 import {
   INVALID_DETAILS,
   MULTIPLE_ACCOUNT_EXISTS,
@@ -9,6 +9,7 @@ import {
 import database from "../Model/sequelize";
 import { STUDENT_ROLE } from "./../utils/roomConstants";
 import _ from "lodash";
+import { Sequelize } from "sequelize";
 
 export const loginUserService = async (userDataObj) => {
   try {
@@ -43,7 +44,6 @@ export const registerUserService = async (userDataObj) => {
     const response = await database.Roles.findOne({ where: { role } });
     console.log("Roles Response ==============", response?.dataValues?.id);
     const role_id = response?.dataValues?.id;
-    // await addUserToDb(email, userName, securedPassword, role, name);
     await database.Users.create({
       name,
       email,
@@ -99,6 +99,8 @@ export const userVerificationService = async (userObj) => {
     yekolaLogger.info(`Verifying User details for user: ${userObj}`);
     const { password, userName } = userObj;
     const result = await getUserDetailsFromDb(userName);
+    // const [result, metadata] = await database.sequelize.query(`select users.id as id, name, email, user_name, password, role, room_edit_allowed  FROM users left join roles on users.role_id=roles.id  WHERE user_name="${userName}"`);
+    console.log("=============", result)
     if (result.length > 1) {
       return { error: true, reason: MULTIPLE_ACCOUNT_EXISTS, errCode: 409 };
     }
