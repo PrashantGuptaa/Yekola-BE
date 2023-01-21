@@ -1,3 +1,4 @@
+import database from "../Model/sequelize";
 import { listHmsRoomsFromDb } from "../Model/yekola.db";
 import { extractUsefulRoomInformation } from "../utils/utils";
 
@@ -7,7 +8,8 @@ export const listRoomsController = async (req, res) => {
     yekolaLogger.info(
       `Fetching all room where product is ${product} - controller`
     );
-    const response = await listHmsRoomsFromDb(product);
+    // const response = await listHmsRoomsFromDb(product);
+    const response = await database.Rooms.findAll({where: {product}})
     const updatedResponse = response.map((roomObj) => extractUsefulRoomInformation(roomObj));
     yekolaLogger.info("Successfully fetched rooms - controller");
     res.status(200).json(updatedResponse);

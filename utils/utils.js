@@ -10,7 +10,13 @@ export const extractUsefulRoomInformation = (roomObj) => {
     date,
     time_str,
     time,
+    start_date: startDate,
+    end_date:endDate,
+    start_time:startTime,
+    end_time:endTime,
   } = roomObj;
+  const dateStr = date_str && JSON.parse(date_str);
+  const timeStr = time_str && JSON.parse(time_str);
   return {
     roomId,
     // name: getRoomName(name),
@@ -19,11 +25,18 @@ export const extractUsefulRoomInformation = (roomObj) => {
     createdBy,
     instructor,
     loading: false,
-    disabled: false,
-    dateStr: date_str && JSON.parse(date_str),
-    timeStr: time_str && JSON.parse(time_str),
-    date: date && JSON.parse(date),
-    time: time && JSON.parse(time),
+    disabled: isRoomDisabled(    startDate,
+      endDate,
+      startTime,
+      endTime,),
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    // dateStr,
+    // timeStr,
+    // date: date && JSON.parse(date),
+    // time: time && JSON.parse(time),
   };
 };
 
@@ -39,3 +52,8 @@ export const replaceAllfromString = (str, search, replace) => {
   }
   return str;
 };
+
+const isRoomDisabled = (dateStr, timeStr) => {
+const date = new Date();
+console.log(date, dateStr, timeStr)
+}

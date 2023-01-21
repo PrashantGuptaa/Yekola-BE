@@ -1,5 +1,7 @@
 import Sequelize, { DataTypes } from "sequelize";
+import HmsRoomsModel from "./hmsRooms";
 import UsersModel from "./user";
+import RolesModel from './roles';
 
 async function sequelizeConnection() {
   const sequelize = new Sequelize(
@@ -26,6 +28,9 @@ async function sequelizeConnection() {
   database.Sequelize = Sequelize;
   database.sequelize = sequelize;
   database.Users = UsersModel(sequelize, DataTypes);
+  database.Rooms = HmsRoomsModel(sequelize, DataTypes);
+  database.Roles = RolesModel(sequelize, DataTypes);
+
   database.sequelize.sync({ force: false }).then(() => {
     console.log("Successfully Synced database with models");
   });

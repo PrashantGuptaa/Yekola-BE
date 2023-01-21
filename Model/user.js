@@ -6,6 +6,10 @@ const UsersModel = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         required: true,
       },
+      userName: {
+        type: DataTypes.STRING,
+        required: true,
+      },
       email: {
         type: DataTypes.STRING,
         required: true,
