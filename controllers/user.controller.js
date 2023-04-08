@@ -3,8 +3,8 @@ import {
   registerUserService,
   updatePasswordService,
   userVerificationService,
-} from "../services/user.service";
-import { getUserDetailsFromDb } from "../Model/yekola.db";
+} from "../services/user.service.js";
+import { getUserDetailsFromDb } from "../Model/yekola.db.js";
 import _ from "lodash";
 
 export const loginUserController = async (req, res) => {

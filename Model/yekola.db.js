@@ -1,5 +1,4 @@
-import postgresClientConnection from "../configurations/dbConnections/postgresConnection";
-import database from "./sequelize";
+import database from "./sequelize.js";
 
 // export const getUserDetailsFromDb = async (userName) => {
 //   try {

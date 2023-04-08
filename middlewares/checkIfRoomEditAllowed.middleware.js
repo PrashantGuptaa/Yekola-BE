@@ -3,7 +3,7 @@ import {
   MISSING_TOKEN,
   ROOM_EDIT_NOT_ALLOWED,
   TOKEN_EXPIRED,
-} from "../configurations/constants/configMessages";
+} from "../configurations/constants/configMessages.js";
 
 export const checkIfRoomEditAllowedMiddleware = async (req, res, next) => {
   try {

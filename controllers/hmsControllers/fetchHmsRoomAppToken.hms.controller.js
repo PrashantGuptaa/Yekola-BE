@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { generateAppTokenHmsService } from "../../services/hmsService/appHms.service";
+import { generateAppTokenHmsService } from "../../services/hmsService/appHms.service.js";
 
 const fetchHmsRoomAppTokenController = async (req, res) => {
   try {

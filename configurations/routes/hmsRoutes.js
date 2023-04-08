@@ -1,9 +1,9 @@
 import express from "express";
-import createHmsRoomsController from "../../controllers/hmsControllers/createHmsRooms.hms.controller";
-import fetchHmsRoomAppTokenController from "../../controllers/hmsControllers/fetchHmsRoomAppToken.hms.controller";
-import listHmsRoomsController from "../../controllers/hmsControllers/listHmsRooms.hms.controller";
-import { checkIfRoomEditAllowedMiddleware } from "../../middlewares/checkIfRoomEditAllowed.middleware";
-import { authenticate } from "./../../middlewares/authenticate";
+import createHmsRoomsController from "../../controllers/hmsControllers/createHmsRooms.hms.controller.js";
+import fetchHmsRoomAppTokenController from "../../controllers/hmsControllers/fetchHmsRoomAppToken.hms.controller.js";
+import listHmsRoomsController from "../../controllers/hmsControllers/listHmsRooms.hms.controller.js";
+import { checkIfRoomEditAllowedMiddleware } from "../../middlewares/checkIfRoomEditAllowed.middleware.js";
+import { authenticate } from "./../../middlewares/authenticate.js";
 
 const hmsRouter = express.Router();
 

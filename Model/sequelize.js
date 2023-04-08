@@ -1,7 +1,7 @@
 import Sequelize, { DataTypes } from "sequelize";
-import HmsRoomsModel from "./hmsRooms";
-import UsersModel from "./user";
-import RolesModel from "./roles";
+import HmsRoomsModel from "./hmsRooms.js";
+import UsersModel from "./user.js";
+import RolesModel from "./roles.js";
 
 async function sequelizeConnection() {
   const sequelize = new Sequelize(

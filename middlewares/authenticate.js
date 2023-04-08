@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import {
   MISSING_TOKEN,
   TOKEN_EXPIRED,
-} from "../configurations/constants/configMessages";
+} from "../configurations/constants/configMessages.js";
 
 export const authenticate = async (req, res, next) => {
   try {

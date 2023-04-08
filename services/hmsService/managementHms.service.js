@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 import { v4 } from "uuid";
-import HttpServices from "../HttpServices/http.service";
+import HttpServices from "../HttpServices/http.service.js";
 import {
   extractUsefulRoomInformation,
-} from "../../utils/utils";
-import database from "../../Model/sequelize";
+} from "../../utils/utils.js";
+import database from "../../Model/sequelize.js";
 import _ from "lodash";
 
 const generateHmsManagementToken = async () => {

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { createHmsRoomService } from "../../services/hmsService/managementHms.service";
+import { createHmsRoomService } from "../../services/hmsService/managementHms.service.js";
 
 const createHmsRoomsController = async (req, res) => {
   try {

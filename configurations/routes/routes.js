@@ -1,16 +1,16 @@
 import express from "express";
-import healthController from "../../controllers/health.controller";
+import healthController from "../../controllers/health.controller.js";
 import {
   loginUserController,
   registerUserController,
   getCheckUserAuthenticationController,
   updatePasswordController
-} from "../../controllers/user.controller";
-import { fetchAllProductsController } from "../../controllers/products.controller";
-import { listRoomsController } from "../../controllers/listRooms.controller";
-import getShowCreateRoomBtnController from "../../controllers/getShowCreateRoomBtn.controller";
-import { authenticate } from "../../middlewares/authenticate";
-import { checkIfRoomEditAllowedMiddleware } from "../../middlewares/checkIfRoomEditAllowed.middleware";
+} from "../../controllers/user.controller.js";
+import { fetchAllProductsController } from "../../controllers/products.controller.js";
+import { listRoomsController } from "../../controllers/listRooms.controller.js";
+import getShowCreateRoomBtnController from "../../controllers/getShowCreateRoomBtn.controller.js";
+import { authenticate } from "../../middlewares/authenticate.js";
+import { checkIfRoomEditAllowedMiddleware } from "../../middlewares/checkIfRoomEditAllowed.middleware.js";
 
 const router = express.Router();
 

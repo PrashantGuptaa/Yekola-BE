@@ -1,15 +1,14 @@
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
-import { getUserDetailsFromDb } from "../Model/yekola.db";
+import { getUserDetailsFromDb } from "../Model/yekola.db.js";
 import {
   INVALID_DETAILS,
   MULTIPLE_ACCOUNT_EXISTS,
   USER_NOT_EXIST,
-} from "../configurations/constants/configMessages";
-import database from "../Model/sequelize";
-import { STUDENT_ROLE } from "./../utils/roomConstants";
+} from "../configurations/constants/configMessages.js";
+import database from "../Model/sequelize.js";
+import { STUDENT_ROLE } from "./../utils/roomConstants.js";
 import _ from "lodash";
-import { Sequelize } from "sequelize";
 
 export const loginUserService = async (userDataObj) => {
   try {
