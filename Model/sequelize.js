@@ -11,6 +11,11 @@ async function sequelizeConnection() {
     {
       host: process.env.PG_HOST,
       dialect: "mysql",
+      dialectOptions: {
+        ssl: {
+          rejectUnauthorized: true,
+        },
+      },
 
       // pool: {max: 5,min:0,idle: 10000}
     }
