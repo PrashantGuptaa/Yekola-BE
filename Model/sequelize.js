@@ -1,7 +1,7 @@
 import Sequelize, { DataTypes } from "sequelize";
 import HmsRoomsModel from "./hmsRooms";
 import UsersModel from "./user";
-import RolesModel from './roles';
+import RolesModel from "./roles";
 
 async function sequelizeConnection() {
   const sequelize = new Sequelize(
@@ -35,7 +35,7 @@ async function sequelizeConnection() {
     console.log("Successfully Synced database with models");
   });
   return database;
-};
+}
 
 const database = await sequelizeConnection();
 
