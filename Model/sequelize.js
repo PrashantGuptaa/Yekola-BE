@@ -2,6 +2,7 @@ import Sequelize, { DataTypes } from "sequelize";
 import HmsRoomsModel from "./hmsRooms.js";
 import UsersModel from "./user.js";
 import RolesModel from "./roles.js";
+import * as mySql2 from 'mysql2';
 
 async function sequelizeConnection() {
   const sequelize = new Sequelize(
@@ -11,6 +12,7 @@ async function sequelizeConnection() {
     {
       host: process.env.PG_HOST,
       dialect: "mysql",
+      dialectModule: mySql2,
       dialectOptions: {
         ssl: {
           rejectUnauthorized: true,
