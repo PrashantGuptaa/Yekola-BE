@@ -27,6 +27,7 @@ const generateHmsManagementToken = () => {
         jwtid: v4(),
       }
     );
+    console.log("Access Token", accessToken);
     yekolaLogger.info("Fetched Access Token for HMS");
     return accessToken;
   } catch (e) {
