@@ -15,6 +15,7 @@ import { checkIfRoomEditAllowedMiddleware } from "../../middlewares/checkIfRoomE
 const router = express.Router();
 
 router.get("/", healthController);
+router.get('/test', (req, res) => res.status(200).json("Test route is success"));
 router.get("/fetch-all-products",authenticate, fetchAllProductsController);
 router.get("/list-rooms/:product",authenticate, listRoomsController);
 router.get("/create-room-auth", authenticate, checkIfRoomEditAllowedMiddleware, getShowCreateRoomBtnController);
