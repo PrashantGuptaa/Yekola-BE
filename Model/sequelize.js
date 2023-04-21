@@ -3,6 +3,9 @@ import HmsRoomsModel from "./hmsRooms.js";
 import UsersModel from "./user.js";
 import RolesModel from "./roles.js";
 import * as mySql2 from 'mysql2';
+import { config } from "dotenv";
+
+config();
 
 async function sequelizeConnection() {
   const sequelize = new Sequelize(
@@ -15,7 +18,7 @@ async function sequelizeConnection() {
       dialectModule: mySql2,
       dialectOptions: {
         ssl: {
-          rejectUnauthorized: true,
+          rejectUnauthorized: false,
         },
       },
 

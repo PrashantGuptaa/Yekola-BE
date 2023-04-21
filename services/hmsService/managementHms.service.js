@@ -7,12 +7,12 @@ import {
 import database from "../../Model/sequelize.js";
 import _ from "lodash";
 
-const generateHmsManagementToken = async () => {
+const generateHmsManagementToken = () => {
   try {
     const HMS_APP_ACCESS_KEY = process.env.HMS_AUTH_ACCESS;
     const HMS_APP_SECRET_KEY = process.env.HMS_AUTH_SECRET;
     yekolaLogger.info(`Fetching Access Token for HMS-Mangement `);
-    const accessToken = await jwt.sign(
+    const accessToken =  jwt.sign(
       {
         access_key: HMS_APP_ACCESS_KEY,
         type: "management",
@@ -52,7 +52,7 @@ export const createHmsRoomService = async (userRoomInfoObj, userName) => {
       region: HMS_REGION,
     });
 
-    const accessToken = await generateHmsManagementToken();
+    const accessToken = generateHmsManagementToken();
     const headers = {
       Authorization: `Bearer ${accessToken}`,
     };
@@ -89,7 +89,7 @@ export const createHmsRoomService = async (userRoomInfoObj, userName) => {
 export const listHmsRoomsService = async () => {
   try {
     yekolaLogger.info(`Fetching List of Rooms`);
-    const accessToken = await generateHmsManagementToken();
+    const accessToken = generateHmsManagementToken();
     const HMS_URL = process.env.HMS_URL;
     const headers = {
       Authorization: `Bearer ${accessToken}`,
