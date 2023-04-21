@@ -13,6 +13,7 @@ const createHmsRoomsController = async (req, res) => {
     yekolaLogger.info("Successfully created HMS Room");
     res.status(201).json(response);
   } catch (e) {
+    console.error(e);
     yekolaLogger.error(e);
     res.status(500).json(e.message);
   }

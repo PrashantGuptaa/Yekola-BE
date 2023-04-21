@@ -6,7 +6,6 @@ import {
 
 export const authenticate = async (req, res, next) => {
   try {
-    console.log("================ ", req.body);
     const authHeader = req.headers["authorization"];
     const token = authHeader?.split(" ")[1];
     yekolaLogger.info(`Validating token`);
@@ -27,6 +26,7 @@ export const authenticate = async (req, res, next) => {
       next();
     });
   } catch (e) {
+    console.error(e);
     yekolaLogger.error(e.message);
     res.status(500).json({ error: e.message });
   }

@@ -17,6 +17,7 @@ export const checkIfRoomEditAllowedMiddleware = async (req, res, next) => {
     yekolaLogger.info(`Successfully validated - User can edit room`);
     next();
   } catch (e) {
+    console.error(e);
     yekolaLogger.error(e.message);
     res.status(500).json({ error: e.message });
   }
