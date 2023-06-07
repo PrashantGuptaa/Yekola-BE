@@ -2,6 +2,7 @@ import {
   loginUserService,
   registerUserService,
   updatePasswordService,
+  updateUserRolesService,
   userVerificationService,
 } from "../services/user.service.js";
 import { getUserDetailsFromDb } from "../Model/yekola.db.js";
@@ -18,7 +19,6 @@ export const loginUserController = async (req, res) => {
       return;
     }
     const accessToken = await loginUserService(userDetails);
-    console.log(req.user, userDetails);
     const role = _.get(userDetails, ["role"]);
     yekolaLogger.info("Successfully generated access token for user");
     res.status(200).json({ accessToken, role });
@@ -72,3 +72,18 @@ export const updatePasswordController = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
+
+export const updateUserRoleController = async (req, res) => {
+try {
+  const { userDetails } = req.body;
+  const {error, errCode, reason} = await updateUserRolesService(userDetails, _.get(req, ['user', 'userName']));
+  if (error) {
+    res.status(errCode).json({ error: reason });
+    return;
+  }
+  res.status(200).json({ success: true });
+} catch (e) {
+  yekolaLogger.error(e);
+  res.status(500).json({ error: e.message });
+}
+}

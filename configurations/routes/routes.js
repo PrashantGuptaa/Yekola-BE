@@ -4,7 +4,8 @@ import {
   loginUserController,
   registerUserController,
   getCheckUserAuthenticationController,
-  updatePasswordController
+  updatePasswordController,
+  updateUserRoleController
 } from "../../controllers/user.controller.js";
 import { fetchAllProductsController } from "../../controllers/products.controller.js";
 import { listRoomsController } from "../../controllers/listRooms.controller.js";
@@ -24,5 +25,5 @@ router.post("/login", loginUserController);
 router.post("/register", registerUserController);
 router.get('/user/validation/', authenticate, getCheckUserAuthenticationController);
 router.post('/user/update-password', updatePasswordController);
-
+router.post('/user/update-role',authenticate, updateUserRoleController);
 export default router;

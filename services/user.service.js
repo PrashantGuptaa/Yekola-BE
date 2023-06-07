@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import { getUserDetailsFromDb } from "../Model/yekola.db.js";
 import {
+  ADMIN_ONLY_OPERATIONS,
   INVALID_DETAILS,
   MULTIPLE_ACCOUNT_EXISTS,
   USER_NOT_EXIST,
@@ -12,13 +13,14 @@ import _ from "lodash";
 
 export const loginUserService = async (userDataObj) => {
   try {
-    const { email, role, user_name, name, room_edit_allowed } = userDataObj;
+    const { email, role, user_name, name, room_edit_allowed, admin } = userDataObj;
     const accessToken = generateAccessToken({
       name,
       userName: user_name,
       role,
       email,
       roomEditAllowed: room_edit_allowed,
+      admin
     });
     return accessToken;
   } catch (e) {
@@ -41,7 +43,6 @@ export const registerUserService = async (userDataObj) => {
     };
 
     const response = await database.Roles.findOne({ where: { role } });
-    console.log("Roles Response ==============", response?.dataValues?.id);
     const role_id = response?.dataValues?.id;
     await database.Users.create({
       name,
@@ -98,8 +99,6 @@ export const userVerificationService = async (userObj) => {
     yekolaLogger.info(`Verifying User details for user: ${userObj}`);
     const { password, userName } = userObj;
     const result = await getUserDetailsFromDb(userName);
-    // const [result, metadata] = await database.sequelize.query(`select users.id as id, name, email, user_name, password, role, room_edit_allowed  FROM users left join roles on users.role_id=roles.id  WHERE user_name="${userName}"`);
-    console.log("=============", result)
     if (result.length > 1) {
       return { error: true, reason: MULTIPLE_ACCOUNT_EXISTS, errCode: 409 };
     }
@@ -121,7 +120,51 @@ export const userVerificationService = async (userObj) => {
   }
 };
 
+export const updateUserRolesService = async (userDetails, executionUser) => {
+  try {
+    const promiseArr= [];
+    const { Users } = database;
+    const result = await getUserDetailsFromDb(executionUser);
+    const executionUserDetails = result[0];
+   if(!executionUserDetails.admin) {
+    return { error: true, reason: ADMIN_ONLY_OPERATIONS, errCode: 403 };
+    
+   }
+   yekolaLogger.info("Updating User Roles", userDetails?.toString())
+    userDetails.forEach(userDetail => {
+      const { userName, roleId } = userDetail;
+      const upadteQuery = Users.update(
+        {
+          role_id: roleId,
+        },
+        {
+          where: {
+            user_name: userName,
+          },
+        }
+      )
+      promiseArr.push(upadteQuery);
+    });
+
+    const response = await Promise.all(promiseArr);
+    yekolaLogger.info("Successfully updated user roles");
+  } catch (e) {
+    console.error(e);
+    yekolaLogger.error("Error while updating user details", e.message);
+    throw new Error(e.message);
+  }
+}
+
+// export const isUserAdmin = async () => {
+//   try {
+    
+//   } catch (e) {
+//     con
+//   }
+// }
+
 const generateHashedPassword = async (password) => {
   const securedPassword = await bcryptjs.hash(password, 10);
   return securedPassword;
 };
+
