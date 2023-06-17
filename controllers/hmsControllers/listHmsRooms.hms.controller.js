@@ -6,7 +6,7 @@ const listHmsRoomsController = async (req, res) => {
     yekolaLogger.info("Fetching HMS Rooms");
     const response = await listHmsRoomsService();
     yekolaLogger.info("Successfully fetched list of HMS Room");
-    res.status(200).json(response);
+    res.status(200).json({roomList: response, count: response.length});
   } catch (e) {
     yekolaLogger.error(e.message);
     res.status(500).json(e.message);

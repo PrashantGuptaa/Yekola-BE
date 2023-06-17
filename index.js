@@ -5,8 +5,8 @@ import router from "./configurations/routes/routes.js";
 import winstonLogger from "./utils/logger.js";
 import bodyParser from "body-parser";
 import hmsRouter from "./configurations/routes/hmsRoutes.js";
-import "./Model/sequelize.js";
 import healthTestController from "./controllers/health.controller.js";
+import './Model/connection.js';
 
 config();
 const app = express();
@@ -29,4 +29,4 @@ app.use("/api/v1", hmsRouter);
 app.get('/', healthTestController);
 
 const PORT = process.env.APP_PORT || 5001;
-app.listen(PORT, () => console.log(`⚡Server is running on PORT: ${PORT} `));
+app.listen(PORT, () => console.log(`Server is running on PORT:${PORT}⚡ `));

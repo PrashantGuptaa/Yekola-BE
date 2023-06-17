@@ -5,8 +5,8 @@ import {
   updateUserRolesService,
   userVerificationService,
 } from "../services/user.service.js";
-import { getUserDetailsFromDb } from "../Model/yekola.db.js";
 import _ from "lodash";
+import UserModel from "./../Model/user.schema.js";
 
 export const loginUserController = async (req, res) => {
   try {
@@ -30,13 +30,14 @@ export const loginUserController = async (req, res) => {
 
 export const registerUserController = async (req, res) => {
   try {
-    const result = await getUserDetailsFromDb(req.body.userName);
+    const { userName } = req.body;
+    const result = await UserModel.find({ userName });
     if (result.length > 0) {
       return res
         .status(409)
         .json({ error: "Account with given user name already exists" });
     }
-    yekolaLogger.info("Registering User...");
+    yekolaLogger.info("Registering User");
     const accessToken = await registerUserService(req.body);
     yekolaLogger.info(
       "Sucessfully registered and generated access token for user"
@@ -74,16 +75,19 @@ export const updatePasswordController = async (req, res) => {
 };
 
 export const updateUserRoleController = async (req, res) => {
-try {
-  const { userDetails } = req.body;
-  const {error, errCode, reason} = await updateUserRolesService(userDetails, _.get(req, ['user', 'userName']));
-  if (error) {
-    res.status(errCode).json({ error: reason });
-    return;
+  try {
+    const { userDetails } = req.body;
+    const { error, errCode, reason } = await updateUserRolesService(
+      userDetails,
+      _.get(req, ["user"])
+    );
+    if (error) {
+      res.status(errCode).json({ error: reason });
+      return;
+    }
+    res.status(200).json({ success: true });
+  } catch (e) {
+    yekolaLogger.error(e);
+    res.status(500).json({ error: e.message });
   }
-  res.status(200).json({ success: true });
-} catch (e) {
-  yekolaLogger.error(e);
-  res.status(500).json({ error: e.message });
-}
-}
+};

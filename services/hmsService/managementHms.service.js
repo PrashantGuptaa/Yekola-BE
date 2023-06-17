@@ -1,18 +1,18 @@
 import jwt from "jsonwebtoken";
 import { v4 } from "uuid";
 import HttpServices from "../HttpServices/http.service.js";
-import {
-  extractUsefulRoomInformation,
-} from "../../utils/utils.js";
-import database from "../../Model/sequelize.js";
+import { extractUsefulRoomInformation } from "../../utils/utils.js";
 import _ from "lodash";
+import HmsRoomsModel from "../../Model/hmsRooms.Schema.js";
+import HMS from "@100mslive/server-sdk";
 
 const generateHmsManagementToken = () => {
   try {
     const HMS_APP_ACCESS_KEY = process.env.HMS_AUTH_ACCESS;
     const HMS_APP_SECRET_KEY = process.env.HMS_AUTH_SECRET;
+
     yekolaLogger.info(`Fetching Access Token for HMS-Mangement `);
-    const accessToken =  jwt.sign(
+    const accessToken = jwt.sign(
       {
         access_key: HMS_APP_ACCESS_KEY,
         type: "management",
@@ -41,42 +41,51 @@ export const createHmsRoomService = async (userRoomInfoObj, userName) => {
     const { name, description, product, startDateTime, endDateTime } =
       userRoomInfoObj;
     yekolaLogger.info(`Attempting to create HMS Room`, userRoomInfoObj);
-    const HMS_URL = process.env.HMS_URL;
-    const TEMPLATE_ID = process.env.HMS_TEMPLATE_ID;
-    const HMS_REGION = process.env.HMS_REGION;
+
+    const {
+      HMS_TEMPLATE_ID,
+      HMS_REGION,
+      HMS_AUTH_ACCESS,
+      HMS_AUTH_SECRET
+    } = process.env;
+
     const roomName = updatedRoomName(name);
     const roomDesciption = description || "";
-    const data = JSON.stringify({
+    const data = {
       name: roomName,
       description: roomDesciption,
-      template_id: TEMPLATE_ID,
+      template_id: HMS_TEMPLATE_ID,
       region: HMS_REGION,
-    });
-
-    const accessToken = generateHmsManagementToken();
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
+      recording_info: null,
     };
-    const response = await HttpServices.postRequest(HMS_URL, data, headers);
+
+    const hms = new HMS.SDK(HMS_AUTH_ACCESS, HMS_AUTH_SECRET);
+
+    const roomWithOptions = await hms.rooms.create(data);
+    console.log("Room with options", roomWithOptions);
 
     yekolaLogger.info(
       "Successfully created room in HMS Platform, Proceeding to save information in DB"
     );
-    const { id: room_id, app_id } = response.data;
-    const result = await database.Rooms.create({
+    const { id: room_id, app_id } = roomWithOptions;
+
+    const roomObj = {
       name: roomName,
       description: roomDesciption,
-      room_id,
-      app_id,
+      roomId: room_id,
+      appId: app_id,
       product,
-      start_date_time: startDateTime,
-      end_date_time: endDateTime,
+      startDateTime,
+      endDateTime,
       instructor: userName,
-      last_updated_by: userName,
-      created_by: userName,
-    });
+      lastUpdatedBy: userName,
+      createdBy: userName,
+    }
 
-    const roomObj = extractUsefulRoomInformation(result?.dataValues);
+    const result = await HmsRoomsModel.collection.insertOne(roomObj);
+
+    console.log("Result", result);
+
     yekolaLogger.info("Successfully created HMS Room - HMS Service");
 
     return roomObj;
@@ -90,20 +99,41 @@ export const createHmsRoomService = async (userRoomInfoObj, userName) => {
 export const listHmsRoomsService = async () => {
   try {
     yekolaLogger.info(`Fetching List of Rooms`);
-    const accessToken = generateHmsManagementToken();
-    const HMS_URL = process.env.HMS_URL;
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-    const response = await HttpServices.getRequest(HMS_URL, headers);
+    const {
+      HMS_TEMPLATE_ID,
+      HMS_REGION,
+      HMS_AUTH_ACCESS,
+      HMS_AUTH_SECRET
+    } = process.env;
+
+    const hms = new HMS.SDK(HMS_AUTH_ACCESS, HMS_AUTH_SECRET);
+    // const response =  hms.rooms.(HMS_AUTH_ACCESS, HMS_AUTH_SECRET);
+
+    const allSessionsIterable = hms.sessions.list();
+    const roomList = [];
+    // return allSessionsIterable;
+for await (const session of allSessionsIterable) {
+  // console.log(session);
+  roomList.push(session);
+  if (!allSessionsIterable.isNextCached) {
+    console.log("the next loop is gonna take some time");
+  }
+}
+// console.log(response , 'F-5');
+    // const accessToken = generateHmsManagementToken();
+    // const HMS_URL = process.env.HMS_URL;
+    // const headers = {
+    //   Authorization: `Bearer ${accessToken}`,
+    // };
+    // const response = await HttpServices.getRequest(HMS_URL, headers);
 
     yekolaLogger.info("Successfully fetched list of rooms - HMS Service");
-    return response.data;
+    return roomList;
   } catch (e) {
     yekolaLogger.error(`Error while creating HMS Room: ${e}`);
     throw new Error(e);
   }
 };
 
-const updatedRoomName = (name = "Yekola Room") =>
-  `${name?.split(" ").join("_")}_${v4()}`;
+const updatedRoomName = (name = "Yekola Room") => name.replace(/ /g, "-");
+// `${name?.split(" ").join("-")}`;

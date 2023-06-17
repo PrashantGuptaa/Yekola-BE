@@ -1,4 +1,4 @@
-import database from "../Model/sequelize.js";
+import HmsRoomsModel from "../Model/hmsRooms.Schema.js";
 import { extractUsefulRoomInformation } from "../utils/utils.js";
 
 export const listRoomsController = async (req, res) => {
@@ -7,10 +7,9 @@ export const listRoomsController = async (req, res) => {
     yekolaLogger.info(
       `Fetching all room where product is ${product} - controller`
     );
-    const response = await database.Rooms.findAll({
-      where: { product },
-      order: [["start_date_time", "ASC"]],
-    });
+    const response = await HmsRoomsModel.find(
+      { product },
+    );
     const updatedResponse = response.map((roomObj) =>
       extractUsefulRoomInformation(roomObj)
     );

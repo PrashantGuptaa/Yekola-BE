@@ -1,17 +1,18 @@
 import  moment  from 'moment';
 
 export const extractUsefulRoomInformation = (roomObj) => {
+  console.log("F-4", roomObj);
   const {
-    room_id: roomId,
+    roomId,
     name,
     description,
-    created_by: createdBy,
+     createdBy,
     instructor,
-    start_date_time: startDateTime,
-    end_date_time:endDateTime,
+     startDateTime,
+    endDateTime,
   } = roomObj;
-  let updatedName = name.slice(0, name.lastIndexOf("_"));
-  updatedName = updatedName.replace(/_/g, ' ');
+  // let updatedName = name.slice(0, name.lastIndexOf("_"));
+ const  updatedName = name.replace(/-/g, ' ');
   return {
     roomId,
     name: updatedName,
