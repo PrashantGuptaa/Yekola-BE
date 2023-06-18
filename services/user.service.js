@@ -114,8 +114,6 @@ export const userVerificationService = async (userObj) => {
 export const updateUserRolesService = async (userDetails, executionUser) => {
   try {
     const promiseArr = [];
-    // const { Users } = database;
-    console.log("F-1", executionUser);
     if (executionUser.role != ADMIN_ROLE) {
       return { error: true, reason: ADMIN_ONLY_OPERATIONS, errCode: 403 };
     }

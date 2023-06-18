@@ -40,7 +40,7 @@ const HmsRoomsSchema = new Schema({
         type: Date,
         default: Date.now,
       },
-      last_updated_by: {
+      owner: {
         type: String,
         required: true,
       },

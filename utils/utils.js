@@ -1,7 +1,6 @@
 import  moment  from 'moment';
 
 export const extractUsefulRoomInformation = (roomObj) => {
-  console.log("F-4", roomObj);
   const {
     roomId,
     name,
