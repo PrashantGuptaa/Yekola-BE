@@ -39,8 +39,8 @@ export const registerUserService = async (userDataObj) => {
       role,
       name,
       password: securedPassword,
-      createAt: Date.now(),
-      updatedAt: Date.now()
+      createAt: new Date(),
+      updatedAt: new Date()
     };
 
     await UserModel.collection.insertOne(dataObj);
