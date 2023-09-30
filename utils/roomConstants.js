@@ -1,5 +1,29 @@
-export const LISTENER_ROLE = 'listener';
-export const TEACHER_ROLE = 'teacher';
-export const MODERATOR_ROLE = 'moderator';
-export const SPEAKER_ROLE = 'speaker';
-export const ADMIN_ROLE = 'admin';
+const LISTENER_ROLE = "listener";
+
+const TEACHER_ROLE = "teacher";
+
+const MODERATOR_ROLE = "moderator";
+
+const SPEAKER_ROLE = "speaker";
+
+const ADMIN_ROLE = "admin";
+
+const USER_ROLES = [
+  LISTENER_ROLE,
+  TEACHER_ROLE,
+  MODERATOR_ROLE,
+  SPEAKER_ROLE,
+  ADMIN_ROLE,
+];
+
+const ALLOWED_ROLES_FOR_ROOM_EDIT = [TEACHER_ROLE, MODERATOR_ROLE, ADMIN_ROLE];
+
+module.exports = {
+  LISTENER_ROLE,
+  SPEAKER_ROLE,
+  ADMIN_ROLE,
+  TEACHER_ROLE,
+  MODERATOR_ROLE,
+  USER_ROLES,
+  ALLOWED_ROLES_FOR_ROOM_EDIT,
+};
