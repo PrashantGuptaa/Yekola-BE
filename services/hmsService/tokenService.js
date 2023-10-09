@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { v4 } = require("uuid");
-
+require('dotenv').config();
 // A service class for Token generation and management
 class TokenService {
   static #app_access_key = process.env.HMS_AUTH_ACCESS;

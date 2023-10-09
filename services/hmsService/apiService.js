@@ -1,6 +1,7 @@
 const { logger } = require("../logService");
 
 const axios = require("axios").default;
+require('dotenv').config();
 
 // A service class for all REST API operations
 class APIService {
@@ -69,6 +70,7 @@ class APIService {
 
   // A method for POST requests using the configured Axios instance
   async post(path, payload) {
+    logger.info(`Making post call to path: ${path}`);
     const res = await this.#axiosInstance.post(path, payload || {});
     logger.info(`post call to path - ${path}, status code - ${res.status}`);
     return res.data;
