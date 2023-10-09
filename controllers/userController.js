@@ -50,12 +50,6 @@ const fetchUserDetails = async (req, res) => {
         password: 0,
         profilePhoto: 0,
         active: 0,
-        //   email: 1,
-        //   userName: 1,
-        //   name: 1,
-        //   langaugesLearnt: 1,
-        //   langaugesLearning: 1,
-        //   role: 1,
       }
     );
     logger.info(`Fetched user details`);

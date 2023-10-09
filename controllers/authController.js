@@ -17,6 +17,7 @@ const User = require("../Model/userModel");
 const { logger, setUserContext } = require("../services/logService");
 const { sendEmailService } = require("../services/emailService");
 const { sendOtpService } = require("../services/authService");
+const { readFromS3Service } = require("../services/s3Service");
 
 const signUp = async (req, res) => {
   try {
@@ -48,7 +49,12 @@ const signUp = async (req, res) => {
     logger.info(
       `Registered User. Time Taken: ${(Date.now() - startTime) / 1000}s`
     );
-    return sendResponse(res, 201, "User registration successful.", { token, email, name, role });
+    return sendResponse(res, 201, "User registration successful.", {
+      token,
+      email,
+      name,
+      role,
+    });
   } catch (error) {
     console.error(error);
     return sendResponse(
@@ -93,6 +99,9 @@ const login = async (req, res) => {
     }
 
     const { _id: userId, role, active, name } = user;
+    logger.info(`Fetching profile image from s3`);
+    const profile = await readFromS3Service(userId.toString());
+    logger.info(`Successfully fetched profile image from s3`);
 
     const token = generateToken(userId, email, role, active, name, "12h"); // Generate a token with userId, email, and role
     logger.info(`Logged user with email: ${email}`);
@@ -109,6 +118,7 @@ const login = async (req, res) => {
       email,
       name,
       role,
+      profile: profile.toString(),
     });
   } catch (error) {
     logger.error(error);
