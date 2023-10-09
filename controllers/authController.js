@@ -31,19 +31,6 @@ const signUp = async (req, res) => {
       return sendResponse(res, 400, "Email is already registered.");
     }
 
-    // if (JSON.parse(process.env.ENABLE_EMAIL_VALIDATION || false)) {
-    //   const { valid, reason, validators } = await emailValidator.validate(
-    //     email
-    //   );
-    //   if (!valid) {
-    //     return sendResponse(
-    //       res,
-    //       400,
-    //       `Please provide a valid email address. Reason: ${validators[reason].reason}`
-    //     );
-    //   }
-    // }
-
     const existingUserWithUserName = await User.findOne({ userName });
 
     if (existingUserWithUserName) {
@@ -56,12 +43,12 @@ const signUp = async (req, res) => {
     const { _id: userId, role, active } = user;
     const token = generateToken(userId, email, role, active, name, "12h"); // Generate a token with userId, email, and role
 
-    sendOtpService({ userId, email, role, name });
+    await sendOtpService({ userId, email, role, name });
 
     logger.info(
       `Registered User. Time Taken: ${(Date.now() - startTime) / 1000}s`
     );
-    return sendResponse(res, 201, "User registration successful.", { token });
+    return sendResponse(res, 201, "User registration successful.", { token, email, name, role });
   } catch (error) {
     console.error(error);
     return sendResponse(

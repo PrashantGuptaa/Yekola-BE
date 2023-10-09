@@ -1,3 +1,5 @@
+const { logger } = require("../logService");
+
 const axios = require("axios").default;
 
 // A service class for all REST API operations
@@ -41,7 +43,7 @@ class APIService {
           (error.response?.status === 403 || error.response?.status === 401) &&
           !originalRequest._retry
         ) {
-          console.log("Retrying request with refreshed token");
+          logger.info("Retrying request with refreshed token");
           originalRequest._retry = true;
 
           // Force refresh Management token on error making API call
@@ -61,14 +63,14 @@ class APIService {
   // A method for GET requests using the configured Axios instance
   async get(path, queryParams) {
     const res = await this.#axiosInstance.get(path, { params: queryParams });
-    console.log(`get call to path - ${path}, status code - ${res.status}`);
+    logger.info(`get call to path - ${path}, status code - ${res.status}`);
     return res.data;
   }
 
   // A method for POST requests using the configured Axios instance
   async post(path, payload) {
     const res = await this.#axiosInstance.post(path, payload || {});
-    console.log(`post call to path - ${path}, status code - ${res.status}`);
+    logger.info(`post call to path - ${path}, status code - ${res.status}`);
     return res.data;
   }
 }

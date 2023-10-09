@@ -20,8 +20,9 @@ const mongoUrl = process.env.MONGO_CONNECTION_STRING;
 
 // Middleware
 app.use(cors());
+// parse application/json
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
-
 app.use(httpContext.middleware);
 
 app.use((req, res, next) => {

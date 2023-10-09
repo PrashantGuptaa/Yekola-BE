@@ -28,7 +28,7 @@ class TokenService {
       const currTimeSeconds = Math.floor(Date.now() / 1000);
       return !exp || exp + buffer < currTimeSeconds;
     } catch (err) {
-      console.log("error in decoding token", err);
+      console.error("error in decoding token", err);
       return true;
     }
   }
