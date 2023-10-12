@@ -38,9 +38,7 @@ class APIService {
         return response;
       },
       (error) => {
-        console.error("Error in making API call", {
-          response: error.response?.data,
-        });
+        console.error("Error in making API call", error);
         const originalRequest = error.config;
         if (
           (error.response?.status === 403 || error.response?.status === 401) &&
