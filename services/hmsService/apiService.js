@@ -12,7 +12,7 @@ class APIService {
     console.log("F-1 HMS URL", process.env.HMS_URL);
     logger.info(`HMS URL: ${process.env.HMS_URL}`)
     this.#axiosInstance = axios.create({
-      baseURL: process.env.HMS_URL,
+      baseURL: "https://api.100ms.live/v2",
       timeout: 3 * 60000,
     });
     this.#tokenServiceInstance = tokenService;
