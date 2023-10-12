@@ -23,6 +23,7 @@ class APIService {
   #configureAxios() {
     this.#axiosInstance.interceptors.request.use(
       (config) => {
+        console.log("Management token", this.#tokenServiceInstance.getManagementToken())
         // Add Authorization on every request made using the Management token
         config.headers = {
           Authorization: `Bearer ${this.#tokenServiceInstance.getManagementToken()}`,
