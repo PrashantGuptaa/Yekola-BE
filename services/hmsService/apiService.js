@@ -9,6 +9,8 @@ class APIService {
   #tokenServiceInstance;
   constructor(tokenService) {
     // Set Axios baseURL to 100ms API BaseURI
+    console.log("F-1 HMS URL", process.env.HMS_URL);
+    logger.info(`HMS URL: ${process.env.HMS_URL}`)
     this.#axiosInstance = axios.create({
       baseURL: process.env.HMS_URL,
       timeout: 3 * 60000,
