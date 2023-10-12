@@ -9,8 +9,6 @@ class APIService {
   #tokenServiceInstance;
   constructor(tokenService) {
     // Set Axios baseURL to 100ms API BaseURI
-    console.log("F-1 HMS URL", process.env.HMS_URL);
-    logger.info(`HMS URL: ${process.env.HMS_URL}`)
     this.#axiosInstance = axios.create({
       baseURL: "https://api.100ms.live/v2",
       timeout: 3 * 60000,
@@ -23,7 +21,6 @@ class APIService {
   #configureAxios() {
     this.#axiosInstance.interceptors.request.use(
       (config) => {
-        console.log("Management token", this.#tokenServiceInstance.getManagementToken())
         // Add Authorization on every request made using the Management token
         config.headers = {
           Authorization: `Bearer ${this.#tokenServiceInstance.getManagementToken()}`,
