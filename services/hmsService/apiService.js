@@ -53,7 +53,7 @@ class APIService {
           try {
             return this.axios(originalRequest);
           } catch (error) {
-            console.error("Unable to Retry!");
+            logger.error("Unable to Retry!");
           }
         }
         return Promise.reject(error);
