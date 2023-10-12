@@ -41,7 +41,6 @@ class APIService {
       (error) => {
         console.error("Error in making API call", {
           response: error.response?.data,
-          details: error.response?.data?.details.toString()
         });
         const originalRequest = error.config;
         if (
