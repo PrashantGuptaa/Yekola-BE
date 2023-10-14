@@ -15,7 +15,7 @@ const getRooms = async (req, res) => {
     const skip = (page - 1) * perPage;
 
     // Fetch the list of rooms in descending order of createdAt
-    const rooms = await Room.find(
+    const roomsPromise = Room.find(
       { deleted: false },
       "_id name description startDateTime endDateTime roomId"
     )
@@ -25,9 +25,18 @@ const getRooms = async (req, res) => {
       .limit(perPage)
       .exec();
 
+    const roomsCountPromise = Room.countDocuments();
+    const [rooms, roomsCount] = await Promise.all([
+      roomsPromise,
+      roomsCountPromise,
+    ]);
+
     logger.info("Successfully fetched list of rooms");
 
-    return sendResponse(res, 200, "Rooms fetched successfully.", rooms);
+    return sendResponse(res, 200, "Rooms fetched successfully.", {
+      rooms,
+      roomsCount,
+    });
   } catch (error) {
     logger.error(error.message);
     return sendResponse(
@@ -39,6 +48,8 @@ const getRooms = async (req, res) => {
 };
 
 const confirmRoomCreation = async (req, res) =>
-  sendResponse(res, 200, "Authorized to create room", { roomEditAllowed: true });
+  sendResponse(res, 200, "Authorized to create room", {
+    roomEditAllowed: true,
+  });
 
 module.exports = { getRooms, confirmRoomCreation };

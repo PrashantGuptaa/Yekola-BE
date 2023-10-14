@@ -97,8 +97,44 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
+const searchUsers = async (req, res) => {
+  try {
+    const startTime = Date.now();
+    const search = get(req, ["query", "search"]);
+    logger.info(`Fetching users with term: ${search}`);
+    if (!search) {
+      const m = "Search term is missing";
+      logger.info(res, 400, m);
+      sendResponse(res, 400, m);
+      return;
+    }
+    const users = await User.find({
+      $or: [
+        { email: { $regex: search, $options: 'i' } },
+        { name: { $regex: search, $options: 'i' } },
+        { userName: { $regex: search, $options: 'i' } }
+      ]
+    },
+    {
+      email: 1,
+      userName: 1,
+      name: 1,
+      _id: 1
+    })
+
+    logger.info(`Search completed for users. Time Taken: ${Date.now() - startTime}s`);
+
+    sendResponse(res, 200, "Successfully fetched user details", users);
+  } catch (e) {
+    const m = `Error while fetching user details: ${e.message}`;
+    logger.error(m);
+    sendResponse(res, 500, m);
+  }
+};
+
 module.exports = {
   uploadImgToS3,
   fetchUserDetails,
   updateUserDetails,
+  searchUsers,
 };
