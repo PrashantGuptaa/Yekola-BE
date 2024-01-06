@@ -24,7 +24,7 @@ const signUp = async (req, res) => {
     const startTime = Date.now();
     setUserContext(req.body || {});
     logger.info("Registering User");
-    const { email, password, userName, name } = req.body;
+    const { email, password, userName, name, role } = req.body;
 
     const existingUserWithEmail = await User.findOne({ email });
 
@@ -39,9 +39,9 @@ const signUp = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ email, password: hashedPassword, userName, name });
+    const user = new User({ email, password: hashedPassword, userName, name, role });
     await user.save();
-    const { _id: userId, role, active } = user;
+    const { _id: userId, active } = user;
     const token = generateToken(userId, email, role, active, name, "12h"); // Generate a token with userId, email, and role
 
     await sendOtpService({ userId, email, role, name });
@@ -198,6 +198,9 @@ const verifyOtpFromUser = async (req, res) => {
         );
         return sendResponse(res, 200, "OTP verification successful.", {
           token: generateToken(userId, email, role, true, name, "12h"),
+          name,
+          email,
+          role
         });
       }
 
