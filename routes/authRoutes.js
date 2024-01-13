@@ -16,6 +16,12 @@ router.post("/send-otp", authController.sendOtpToUser);
 // Verify OTP Route
 router.post("/verify-otp", authController.verifyOtpFromUser);
 
+// reset passowrd email Route
+router.patch("/reset-password", authController.sendPasswordResetEmailToUser);
+
+// reset passowrd email Route
+router.patch("/update-password", authController.verifyPasswordResetFromUser);
+
 // Verify OTP Route
 router.patch("/update-role/:email", authenticateUser, authController.changeUserRole);
 

@@ -82,6 +82,29 @@ const getHmsRoomAuthToken = async (req, res) => {
   }
 };
 
+
+const getHmsRoomPeers = async (req, res) => {
+  try {
+    logger.info("Fetching room peers");
+    const { roomId } = req.params;    
+    const userId = get(req, ["userData", "userId"]);
+    const role = get(req, ["userData", "role"]);
+
+    const roomToken = tokenService.getAuthToken({
+      room_id: roomId,
+      user_id: userId,
+      role,
+    });
+    logger.info("Successfully fetched room access token");
+
+    sendResponse(res, 200, "Room created successfully", { roomToken });
+  } catch (e) {
+    const m = `Error while fetching auth token: ${e.message}`;
+    logger.error(m);
+    return sendResponse(res, 500, m);
+  }
+};
+
 module.exports = {
   createRoom,
   getHmsRoomAuthToken,

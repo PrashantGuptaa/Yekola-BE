@@ -18,8 +18,8 @@ function generateOTP() {
 const getOtpEmailBody = (token, otp) => `<p>
   Hello! 
   <br/> <br />
-  Please click on the link below to confirm your account <br />
- <a href='${process.env.UI_URL}/${token}/${otp}'> ${process.env.UI_URL}/${token}/${otp} </a><br />
+  <a href='${process.env.UI_URL}/${token}/${otp}'> Click here </a> to confirm your account <br />
+ <br />
   <br/>
   This link will expire in 5 min.
   <br />
@@ -36,14 +36,38 @@ const getOtpEmailBody = (token, otp) => `<p>
   The Yekola Team
   </p>`;
 
-const getOtpEmailSubject = () => `Almost ready to learn ! Click the link to confirm your email`;
+const getOtpEmailSubject = () =>
+  `Almost ready to learn ! Click the link to confirm your email`;
 
 const getWelcomeEmailSubject = (name) => `Welcome to the Yekola Family ${name}`;
 
 const getWelcomeEmailBody = () => `<p>
-<p> Welcome! We’re so glad you’ve decided to join our mission to teach, learn, and preserve African languages.
+<p> Welcome! We're so glad you've decided to join our mission to teach, learn, and preserve African languages.
 </p>
 Add us to your mailing list so you never miss any updates or classes!</p>`;
+
+const getResetPasswordEmailSubject = () =>
+  `Reset Password OTP`;
+
+  const getResetPasswordEmailBody = (otp) => `<p>
+  Hello! 
+  <br/> <br />
+  Please use following security code to reset password <br />
+ <h2> ${otp} </h2><br />
+  This security code will expire in 5 min.
+  <br />
+  
+ <strong>
+ Do not share this with anyone.
+ </strong> 
+
+  <br /> <br />
+  
+  For any questions please email us at welcome@yekola.app
+  <br/>
+  Warm Regards, <br />
+  The Yekola Team
+  </p>`;
 
 module.exports = {
   generateToken,
@@ -52,4 +76,6 @@ module.exports = {
   getOtpEmailSubject,
   getWelcomeEmailSubject,
   getWelcomeEmailBody,
+  getResetPasswordEmailSubject,
+  getResetPasswordEmailBody
 };

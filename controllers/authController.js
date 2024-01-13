@@ -16,7 +16,10 @@ const {
 const User = require("../Model/userModel");
 const { logger, setUserContext } = require("../services/logService");
 const { sendEmailService } = require("../services/emailService");
-const { sendOtpService } = require("../services/authService");
+const {
+  sendOtpService,
+  sendResetEmailService,
+} = require("../services/authService");
 const { readFromS3Service } = require("../services/s3Service");
 
 const signUp = async (req, res) => {
@@ -39,7 +42,13 @@ const signUp = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ email, password: hashedPassword, userName, name, role });
+    const user = new User({
+      email,
+      password: hashedPassword,
+      userName,
+      name,
+      role,
+    });
     await user.save();
     const { _id: userId, active } = user;
     const token = generateToken(userId, email, role, active, name, "12h"); // Generate a token with userId, email, and role
@@ -200,7 +209,7 @@ const verifyOtpFromUser = async (req, res) => {
           token: generateToken(userId, email, role, true, name, "12h"),
           name,
           email,
-          role
+          role,
         });
       }
 
@@ -258,6 +267,85 @@ const changeUserRole = async (req, res) => {
   }
 };
 
+const sendPasswordResetEmailToUser = async (req, res) => {
+  try {
+    const email = get(req.body, ["email"]);
+    if (!email) {
+      return sendResponse(res, 403, "Email is mandatory field.");
+    }
+    // Find the user by userId
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return sendResponse(res, 404, "User not found.");
+    }
+    await sendResetEmailService(email);
+    return sendResponse(res, 200, "OTP sent to user successfully.");
+  } catch (e) {
+    const m = `Error while sending OTP: ${e.message}`;
+    logger.error(m);
+    return sendResponse(res, 500, m);
+  }
+};
+
+const verifyPasswordResetFromUser = async (req, res) => {
+  try {
+    logger.info(`Reseting password for user`);
+    const email = get(req.body, ["email"]);
+    const password = get(req.body, ["password"]);
+    const retypePassword = get(req.body, ["retypePassword"]);
+    const securityCode = get(req.body, ["securityCode"]);
+
+    if (!email || !password || !securityCode) {
+      return sendResponse(
+        res,
+        401,
+        "Password Reset failed. Email, Password are mandatory fields."
+      );
+    }
+
+    if (password !== retypePassword) {
+      return sendResponse(
+        res,
+        401,
+        "Password Reset failed. Email, Re password should be same as password."
+      );
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return sendResponse(
+        res,
+        400,
+        "Password Reset failed. No Account is linked with email: " + email
+      );
+    }
+
+    const { resetPasswordOtp, _id: userId } = user;
+    const lastInd = resetPasswordOtp.lastIndexOf("_");
+
+    const hashedOtp = resetPasswordOtp.slice(0, lastInd);
+    const validity = resetPasswordOtp.slice(lastInd + 1);
+
+    if (validity < Date.now()) {
+      return sendResponse(res, 400, "OTP no longer valid.");
+    }
+
+    const isOtpValid = await bcrypt.compare(securityCode, hashedOtp);
+    if (isOtpValid) {
+      const hashedPassword = await bcrypt.hash(password, 12);
+      await User.findByIdAndUpdate(userId, { password: hashedPassword });
+      return sendResponse(res, 200, "Password reset Successful.");
+    }
+
+    return sendResponse(res, 400, "OTP verification failed. Invalid OTP.");
+  } catch (e) {
+    const m = `Error while verifying OTP: ${e.message}`;
+    logger.error(m);
+    return sendResponse(res, 500, m);
+  }
+};
+
 const confirmUserAuthorization = async (req, res) =>
   sendResponse(res, 200, "Authentication Successful.", { authenticated: true });
 
@@ -268,4 +356,6 @@ module.exports = {
   verifyOtpFromUser,
   changeUserRole,
   confirmUserAuthorization,
+  sendPasswordResetEmailToUser,
+  verifyPasswordResetFromUser,
 };

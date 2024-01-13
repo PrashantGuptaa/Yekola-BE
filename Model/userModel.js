@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema(
     otp: {
       type: String,
     },
+    resetPasswordOtp: {
+      type: String,
+    },
     name: {
       type: String,
       trim: true,
