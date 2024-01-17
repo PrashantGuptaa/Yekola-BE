@@ -25,7 +25,7 @@ const getRooms = async (req, res) => {
       .limit(perPage)
       .exec();
 
-    const roomsCountPromise = Room.countDocuments();
+    const roomsCountPromise = Room.countDocuments({ deleted: false });
     const [rooms, roomsCount] = await Promise.all([
       roomsPromise,
       roomsCountPromise,
@@ -47,9 +47,29 @@ const getRooms = async (req, res) => {
   }
 };
 
+const deleteRoom = async (req, res) => {
+  try {
+    const { roomId } = req.body;
+    logger.info(`Deleting room with id: ${roomId}`);
+
+    await Room.findOneAndUpdate({ roomId }, { deleted: true });
+
+    logger.info("Successfully deleted room with id " + roomId);
+
+    return sendResponse(res, 200, "Rooms deleted successfully.", {});
+  } catch (error) {
+    logger.error(error.message);
+    return sendResponse(
+      res,
+      500,
+      `Error while deleting room: ${error.message}`
+    );
+  }
+};
+
 const confirmRoomCreation = async (req, res) =>
   sendResponse(res, 200, "Authorized to create room", {
     roomEditAllowed: true,
   });
 
-module.exports = { getRooms, confirmRoomCreation };
+module.exports = { getRooms, confirmRoomCreation, deleteRoom };

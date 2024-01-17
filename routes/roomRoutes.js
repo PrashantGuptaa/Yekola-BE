@@ -31,4 +31,12 @@ router.get(
   roomController.confirmRoomCreation
 );
 
+// delete room
+router.patch(
+  "/delete",
+  authenticateUser,
+  checkUserAllowedForEditEoom,
+  roomController.deleteRoom
+);
+
 module.exports = router;
